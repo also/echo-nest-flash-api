@@ -1,0 +1,3 @@
+[submodule "lib/flash-net-utils"]
+	path = lib/flash-net-utils
+	url = git://github.com/also/flash-net-utils.git
