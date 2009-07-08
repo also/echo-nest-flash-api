@@ -11,11 +11,14 @@ package com.ryanberdeen.echonest.api.v3 {
   import flash.events.ProgressEvent;
   import flash.events.SecurityErrorEvent;
   import flash.net.URLLoader;
+  import flash.net.URLRequest;
+  import flash.net.URLVariables;
 
   /**
   * Base class for Echo Nest API classes.
   */
   public class ApiSupport {
+    public static const API_VERSION:int = 3;
     protected var _baseUrl:String = 'http://developer.echonest.com/api/';
     protected var _apiKey:String;
 
@@ -24,6 +27,30 @@ package com.ryanberdeen.echonest.api.v3 {
     */
     public function set apiKey(apiKey:String):void {
       _apiKey = apiKey;
+    }
+
+    /**
+    * Creates a request for an Echo Nest API method call with a set of
+    * parameters.
+    *
+    * @param method The method to call.
+    * @param parameters The parameters to include in the request.
+    *
+    * @return The request to use to call the method.
+    */
+    public function createRequest(method:String, parameters:Object):URLRequest {
+      var variables:URLVariables = new URLVariables;
+      variables.api_key = _apiKey;
+      variables.version = API_VERSION;
+      for (var name:String in parameters) {
+        variables[name] = parameters[name];
+      }
+
+      var request:URLRequest = new URLRequest();
+      request.url = _baseUrl + method;
+      request.data = variables;
+
+      return request;
     }
 
     /**
@@ -69,7 +96,7 @@ package com.ryanberdeen.echonest.api.v3 {
     * @param options The event listener options.
     * @param responseProcessor The function that processes the XML response.
     */
-    public function createLoader(options:Object, responseProcessor:Function = null):URLLoader {
+    public function createLoader(options:Object, responseProcessor:Function = null, ...responseProcessorArgs):URLLoader {
       var loader:URLLoader = new URLLoader();
 
       if (options.onComplete) {
@@ -81,7 +108,8 @@ package com.ryanberdeen.echonest.api.v3 {
           try {
             var responseXml:XML = new XML(loader.data);
             checkStatus(responseXml);
-            var response:Object = responseProcessor(responseXml);
+            responseProcessorArgs.push(responseXml);
+            var response:Object = responseProcessor.apply(responseProcessor, responseProcessorArgs);
             options.onResponse(response);
           }
           catch (e:EchoNestError) {
