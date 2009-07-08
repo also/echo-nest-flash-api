@@ -1,3 +1,9 @@
+/*
+ * Copyright 2009 Ryan Berdeen. All rights reserved.
+ * Distributed under the terms of the MIT License.
+ * See accompanying file LICENSE.txt
+ */
+
 package com.ryanberdeen.echonest.api.v3 {
   /**
   * Represents an Echo Nest API response with a nonzero status code.
