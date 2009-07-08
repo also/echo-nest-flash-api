@@ -31,14 +31,16 @@ package com.ryanberdeen.echonest.api.v3 {
   * array format.</p>
   * 
   * <p>For example:</p>
-  * <pre>var trackApi:TrackApi = new TrackApi();
-  *trackApi.apiKey = 'EJ1B4BFNYQOC56SGF';
+  * <pre>
+  * var trackApi:TrackApi = new TrackApi();
+  * trackApi.apiKey = 'EJ1B4BFNYQOC56SGF';
   *
-  *trackApi.getMode({id: 'music://id.echonest.com/~/TR/TRLFPPE11C3F10749F'}, {
-  *  onResponse: function(mode:Array):void {
-  *    trace('Mode: ' + mode[0] +', confidence: ' + mode[1]);  // Mode: 1, confidence: 1
-  *  }
-  *});</pre>
+  * trackApi.getMode({id: 'music://id.echonest.com/~/TR/TRLFPPE11C3F10749F'}, {
+  *   onResponse: function(mode:Array):void {
+  *     trace('Mode: ' + mode[0] +', confidence: ' + mode[1]);  // Mode: 1, confidence: 1
+  *   }
+  * });
+  * </pre>
   * 
   * <p>Be sure to set the <code>apiKey</code> property before calling any API
   * methods.</p>
