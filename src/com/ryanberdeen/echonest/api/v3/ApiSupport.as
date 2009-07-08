@@ -12,6 +12,7 @@ package com.ryanberdeen.echonest.api.v3 {
   import flash.events.SecurityErrorEvent;
   import flash.net.URLLoader;
   import flash.net.URLRequest;
+  import flash.net.URLRequestHeader;
   import flash.net.URLVariables;
 
   /**
@@ -19,7 +20,14 @@ package com.ryanberdeen.echonest.api.v3 {
   */
   public class ApiSupport {
     public static const API_VERSION:int = 3;
+    /**
+    * @private
+    */
     protected var _baseUrl:String = 'http://developer.echonest.com/api/';
+    
+    /**
+    * @private
+    */
     protected var _apiKey:String;
 
     /**
@@ -49,6 +57,7 @@ package com.ryanberdeen.echonest.api.v3 {
       var request:URLRequest = new URLRequest();
       request.url = _baseUrl + method;
       request.data = variables;
+      request.requestHeaders = new Array(new URLRequestHeader('X-User-Agent', 'echo-nest-flash-api'));
 
       return request;
     }

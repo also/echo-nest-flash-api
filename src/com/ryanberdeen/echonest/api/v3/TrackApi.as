@@ -14,24 +14,30 @@ package com.ryanberdeen.echonest.api.v3 {
 
   /**
   * Methods to interact with the Echo Nest track API.
-  * 
+  *
   * <p>All of the API methods in this class accept basically the same
   * parameters. The <code>parameters</code> parameter contains the parameters
   * to pass to the Echo Nest method. For most methods, this will be
   * <strong><code>id</code></strong> or <strong><code>md5</code></strong>.
   * The <code>api_key</code> and <code>version</code> parameters will always be
   * set.</p>
-  * 
+  *
   * <p>The <code>loaderOptions</code> parameter contains the event listeners
   * for the loading process. Most importantly, the
   * <strong><code>onResponse</code></strong> method will be called with the
-  * results of the API method.</p>
-  * 
+  * results of the API method. See the <code>ApiSupport.createLoader()</code>
+  * method for a description of the loader options.</p>
+  *
   * <p>The methods in this class return data from the Echo Nest API in a simple
-  * array format.</p>
-  * 
-  * <p>For example:</p>
-  * <pre>
+  * array format. For a description of the response formats, see the various
+  * <code>process...Response()</code> methods.</p>
+  *
+  * <p>Be sure to set the <code>apiKey</code> property before calling any API
+  * methods.</p>
+  *
+  * @example This example shows how to retrieve the modality of a track.
+  *
+  * <listing version="3.0">
   * var trackApi:TrackApi = new TrackApi();
   * trackApi.apiKey = 'EJ1B4BFNYQOC56SGF';
   *
@@ -40,10 +46,7 @@ package com.ryanberdeen.echonest.api.v3 {
   *     trace('Mode: ' + mode[0] +', confidence: ' + mode[1]);  // Mode: 1, confidence: 1
   *   }
   * });
-  * </pre>
-  * 
-  * <p>Be sure to set the <code>apiKey</code> property before calling any API
-  * methods.</p>
+  * </listing>
   */
   public class TrackApi extends ApiSupport {
     /**
@@ -74,10 +77,23 @@ package com.ryanberdeen.echonest.api.v3 {
     /**
     * Processes the response from the <code>upload</code> API method.
     *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns:</p>
+    *
+    * <pre>
+    * {
+    *   id:    String(id),
+    *   md5:   String(md5),
+    *   ready: Boolean(ready)
+    * }
+    * </pre>
+    *
     * @param response The response to process.
     *
     * @return The result of processing the response.
     *
+    * @see #upload()
     * @see #uploadFileData()
     */
     public function processUploadResponse(response:XML):Object {
@@ -92,6 +108,14 @@ package com.ryanberdeen.echonest.api.v3 {
     /**
     * Processes the response from an Echo Nest API method that returns a list
     * of numbers with confidence values.
+    *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns an array of:</p>
+    *
+    * <pre>
+    * [Number(value), Number(confidence)]
+    * </pre>
     *
     * @param name The element name of the list items.
     * @param response The response to process.
@@ -136,6 +160,14 @@ package com.ryanberdeen.echonest.api.v3 {
     * Processes the response from an Echo Nest API method that returns a
     * number.
     *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns:</p>
+    *
+    * <pre>
+    * Number(value)
+    * </pre>
+    *
     * @param name The name of the element containing the result value.
     * @param response The response to process.
     *
@@ -171,6 +203,14 @@ package com.ryanberdeen.echonest.api.v3 {
     /**
     * Processes the response from an Echo Nest API method that returns a number
     * with a confidence value.
+    *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns:</p>
+    *
+    * <pre>
+    * [Number(value), Number(confidence)]
+    * </pre>
     *
     * @param name The name of the element containing the result value.
     * @param response The response to process.
@@ -209,6 +249,25 @@ package com.ryanberdeen.echonest.api.v3 {
     /**
     * Processes the response from the <code>get_metadata</code> API method.
     *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns:</p>
+    *
+    * <pre>
+    * {
+    *   bitrate:    Number(bitrate),
+    *   duration:   Number(duration),
+    *   samplerate: Number(samplerate),
+    *   status:     String(status),
+    *   artist:     String(artist),
+    *   release:    String(release),
+    *   title:      String(title)
+    * }
+    * </pre>
+    *
+    * <p>Any additional tags present in the XML will be included in the
+    * response object as strings.</p>
+    *
     * @param response The response to process.
     *
     * @return The result of processing the response.
@@ -235,6 +294,14 @@ package com.ryanberdeen.echonest.api.v3 {
     /**
     * Processes the response from the <code>get_sections</code> API method.
     *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns an array of:</p>
+    *
+    * <pre>
+    * [Number(start), Number(duration)]
+    * </pre>
+    *
     * @param response The response to process.
     *
     * @return The result of processing the response.
@@ -253,6 +320,33 @@ package com.ryanberdeen.echonest.api.v3 {
 
     /**
     * Processes the response from the <code>get_segments</code> API method.
+    *
+    * <p><strong>Response Format</strong></p>
+    *
+    * <p>Returns an array of:</p>
+    *
+    * <pre>
+    * [
+    *   Number(start),
+    *   Number(duration),
+    *   [
+    *     [Number(time), Number(dB)], // start
+    *     [Number(time), Number(dB)], // max
+    *     [Number(time), Number(dB)]  // only present in last segment
+    *   ],
+    *   [Number(pitch1), Number(pitch2), ... Number(pitch12)],
+    *   [Number(coeff1), Number(coeff2), ... Number(coeff12)]
+    * ]
+    * </pre>
+    *
+    * <p>For example:</p>
+    *
+    * <listing version="3.0">
+    * var segment:Array = processSegmentsResponse(xml)[42];
+    * var start:Number = segment[0];
+    * var timbre:Array = segment[4];
+    * var startDb:Number = segment[2][0][1];
+    * </listing>
     *
     * @param response The response to process.
     *
@@ -526,7 +620,7 @@ package com.ryanberdeen.echonest.api.v3 {
     * @return The <code>URLLoader</code> being used to perform the API call.
     *
     * @see #createUploadFileDataRequest()
-    * @see ApiSupport#createLoader
+    * @see ApiSupport#createLoader()
     * @see #processUploadResponse()
     * @see http://developer.echonest.com/docs/method/upload/
     */
