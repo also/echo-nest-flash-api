@@ -57,7 +57,6 @@ package com.ryanberdeen.echonest.api.v3 {
       var request:URLRequest = new URLRequest();
       request.url = _baseUrl + method;
       request.data = variables;
-      request.requestHeaders = new Array(new URLRequestHeader('X-User-Agent', 'echo-nest-flash-api'));
 
       return request;
     }
