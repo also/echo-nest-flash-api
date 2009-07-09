@@ -63,7 +63,7 @@ package com.ryanberdeen.echonest.api.v3 {
         api_key: _apiKey,
         wait: 'N'
       });
-      encoder.addFile('file', 'file', fileData);
+      encoder.addFile('file', 'file' + new Date().time + '.mp3', fileData);
 
       var request:URLRequest = new URLRequest();
       request.url = _baseUrl + 'upload';
