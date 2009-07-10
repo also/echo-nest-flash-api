@@ -54,7 +54,7 @@ Upload
     }
 
     private function uploadFile():void {
-      trackApi.uploadFileData(fileReference.data, {
+      trackApi.uploadFileData({file: fileReference}, {
         onResponse: function(track:Object):void {
           trace('id: ' + track.id + ', md5: ' + track.md5);  // id: music://id.echonest.com/~/TR/TRMVA0211BC6E08329, md5: 2f45abacba9e9d2312afa63a8df10d23
         },

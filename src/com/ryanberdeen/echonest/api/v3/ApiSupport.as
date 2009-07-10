@@ -6,6 +6,7 @@
 
 package com.ryanberdeen.echonest.api.v3 {
   import flash.events.Event;
+  import flash.events.EventDispatcher;
   import flash.events.HTTPStatusEvent;
   import flash.events.IOErrorEvent;
   import flash.events.ProgressEvent;
@@ -24,7 +25,7 @@ package com.ryanberdeen.echonest.api.v3 {
     * @private
     */
     protected var _baseUrl:String = 'http://developer.echonest.com/api/';
-    
+
     /**
     * @private
     */
@@ -101,17 +102,19 @@ package com.ryanberdeen.echonest.api.v3 {
     *   </tr>
     * </tbody></table>
     *
-    * @param options The event listener options.
+    * @param options The event listener options for the loader.
     * @param responseProcessor The function that processes the XML response.
+    * @param responseProcessorArgs The arguments to pass to the response
+    *        processor function.
     */
-    public function createLoader(options:Object, responseProcessor:Function = null, ...responseProcessorArgs):URLLoader {
+    public function createLoader(options:Object, responseProcessor:Function, ...responseProcessorArgs):URLLoader {
       var loader:URLLoader = new URLLoader();
 
       if (options.onComplete) {
         loader.addEventListener(Event.COMPLETE, options.onComplete);
       }
 
-      if (responseProcessor != null && options.onResponse) {
+      if (options.onResponse) {
         loader.addEventListener(Event.COMPLETE, function(e:Event):void {
           try {
             var responseXml:XML = new XML(loader.data);
@@ -128,28 +131,49 @@ package com.ryanberdeen.echonest.api.v3 {
         });
       }
 
+      addEventListeners(options, loader);
+
+      return loader;
+    }
+
+    /**
+    * Adds the standard Echo Nest Flash API event listeners to the event
+    * dispatcher.
+    *
+    * <p>The event dispatcher should be either a <code>URLLoader</code> or a
+    * <code>FileReference</code>.</p>
+    *
+    * <p>This method does not add the <code>onComplete</code> or
+    * <code>onResponse</code> event listeners. They are added by
+    * <code>createLoader()</code>.</p>
+    *
+    * @private
+    *
+    * @param options The event listener options. See
+    *        <code>createLoader()</code> for the list of available options.
+    * @param dispatcher The event dispatcher to add the event listeners to.
+    */
+    protected function addEventListeners(options:Object, dispatcher:EventDispatcher):void {
       if (options.onProgress) {
-        loader.addEventListener(ProgressEvent.PROGRESS, options.onProgress);
+        dispatcher.addEventListener(ProgressEvent.PROGRESS, options.onProgress);
       }
 
       if (options.onSecurityError) {
-        loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, options.onSecurityError);
+        dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, options.onSecurityError);
       }
 
       if (options.onIoError) {
-        loader.addEventListener(IOErrorEvent.IO_ERROR, options.onIoError);
+        dispatcher.addEventListener(IOErrorEvent.IO_ERROR, options.onIoError);
       }
 
       if (options.onError) {
-        loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, options.onError);
-        loader.addEventListener(IOErrorEvent.IO_ERROR, options.onError);
+        dispatcher.addEventListener(SecurityErrorEvent.SECURITY_ERROR, options.onError);
+        dispatcher.addEventListener(IOErrorEvent.IO_ERROR, options.onError);
       }
 
       if (options.onHttpStatus) {
-        loader.addEventListener(HTTPStatusEvent.HTTP_STATUS, options.onHttpStatus);
+        dispatcher.addEventListener(HTTPStatusEvent.HTTP_STATUS, options.onHttpStatus);
       }
-
-      return loader;
     }
 
     /**
