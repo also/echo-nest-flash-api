@@ -5,8 +5,6 @@
  */
 
 package com.ryanberdeen.echonest.api.v3 {
-  import com.ryanberdeen.net.MultipartFormDataEncoder;
-
   import flash.events.DataEvent;
   import flash.events.Event;
   import flash.net.FileReference;
@@ -52,32 +50,6 @@ package com.ryanberdeen.echonest.api.v3 {
   * </listing>
   */
   public class TrackApi extends ApiSupport {
-    /**
-    * Creates a request to invoke the Echo Nest API <code>upload</code> method.
-    *
-    * @param fileReference The file data to upload.
-    * @param parameters The parameters to include in the API request.
-    *
-    * @return The request to use to invoke the method.
-    */
-    public function createUploadFileDataRequest(fileReference:FileReference, parameters:Object):URLRequest {
-      var encoder:MultipartFormDataEncoder = new MultipartFormDataEncoder();
-      encoder.addParameters({
-        version: API_VERSION,
-        api_key: _apiKey
-      });
-      encoder.addParameters(parameters);
-      encoder.addFile('file', fileReference.name, fileReference.data);
-
-      var request:URLRequest = new URLRequest();
-      request.url = _baseUrl + 'upload';
-      request.data = encoder.data;
-      request.contentType = 'multipart/form-data; boundary=' + encoder.boundary;
-      request.method = URLRequestMethod.POST;
-
-      return request;
-    }
-
     /**
     * Adds the standard Echo Nest Flash API event listeners to a file
     * reference.
@@ -642,39 +614,6 @@ package com.ryanberdeen.echonest.api.v3 {
     }
 
     /**
-    * Invokes the Echo Nest <code>upload</code> API method with file data.
-    *
-    * <p>The <code>parameters</code> object must include a <code>file</code>
-    * property, which must be a <code>FileReference</code> that has been
-    * <code>load()</code>ed.</p>
-    *
-    * <p>Becuase of security restrictions in Flash Player 10, this method must
-    * be called as the direct result of a user event. Additionally, because the
-    * data is uploaded using a <code>URLLoader</code>, no progress events are
-    * dispatched during the upload process. See
-    * <a href="http://bugs.adobe.com/jira/browse/FP-1959">Flash Player bug 1959</a>.</p>
-    *
-    * @param parameters The parameters to include in the API request.
-    * @param loaderOptions The event listener options for the loader.
-    *
-    * @return The <code>URLLoader</code> being used to perform the API call.
-    *
-    * @see #createUploadFileDataRequest()
-    * @see ApiSupport#createLoader()
-    * @see #processUploadResponse()
-    * @see http://developer.echonest.com/docs/method/upload/
-    */
-    public function uploadFileData(parameters:Object, loaderOptions:Object):URLLoader {
-      var fileReference:FileReference = parameters.file;
-      delete parameters.file;
-
-      var request:URLRequest = createUploadFileDataRequest(fileReference, parameters);
-      var loader:URLLoader = createLoader(loaderOptions, processUploadResponse);
-      loader.load(request);
-      return loader;
-    }
-
-    /**
     * Invokes the Echo Nest <code>upload</code> API method with a file
     * reference.
     *
@@ -700,6 +639,9 @@ package com.ryanberdeen.echonest.api.v3 {
 
     /**
     * Invokes the Echo Nest <code>upload</code> API method.
+    *
+    * <p>This method is for uploads using the <code>url</code> parameter.
+    * To upload a file, use <code>uploadFileReference()</code>.
     *
     * @param parameters The parameters to include in the API request.
     * @param loaderOptions The event listener options for the loader.

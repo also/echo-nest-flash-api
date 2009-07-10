@@ -8,11 +8,9 @@ http://github.com/also/echo-nest-flash-api
 Getting the source
 ==================
 
-You’ll need to clone the source from github, including the submodules:
+You’ll need to clone the source from github:
 
     git clone git://github.com/also/echo-nest-flash-api.git
-    cd echo-nest-flash-api
-    git submodule update --init
 
 Including in your project
 =========================
@@ -44,17 +42,13 @@ Upload
     private function chooseFile():void {
       fileReference = new FileReference();
       fileReference.addEventListener(Event.SELECT, function(e:Event):void {
-        fileReference.addEventListener(Event.COMPLETE, function(e:Event):void {
-          // file loaded, call uploadFile next
-          trace('loaded ' + fileReference.name);
-        });
-        fileReference.load();
+        uploadFile();
       });
       fileReference.browse();
     }
 
     private function uploadFile():void {
-      trackApi.uploadFileData({file: fileReference}, {
+      trackApi.uploadFileReference({file: fileReference}, {
         onResponse: function(track:Object):void {
           trace('id: ' + track.id + ', md5: ' + track.md5);  // id: music://id.echonest.com/~/TR/TRMVA0211BC6E08329, md5: 2f45abacba9e9d2312afa63a8df10d23
         },
@@ -63,8 +57,6 @@ Upload
         }
       });
     }
-
-Due to security restrictions in Flash Player 10, both `chooseFile()` and `uploadFile()` must be called in response to user clicks.
 
 License
 =======
