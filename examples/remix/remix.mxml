@@ -24,7 +24,7 @@ This example depends on three additional libraries:
   <mx:Panel title="Remix Demo" width="100%" paddingTop="10" paddingRight="10" paddingBottom="10" paddingLeft="10">
     <mx:Button id="browseButton" label="Choose a song…" click="chooseFile();"/>
     <mx:CheckBox id="calculateMd5checkBox" label="Calculate MD5" selected="true"/>
-    <mx:Button id="uploadButton" label="Upload" enabled="false" click="uploadFile();"/>
+    <mx:ProgressBar id="progressBar" mode="manual" label="Progress"/>
     <mx:ComboBox id="remixComboBox" width="100" dataProvider="{remixes}" close="remixComboBoxCloseHandler(event);" enabled="false"/>
     <mx:Button id="playButton" label="Play" enabled="false" click="play();"/>
     <mx:Button id="pauseButton" label="Pause" enabled="false" click="pause();"/>
@@ -89,7 +89,6 @@ This example depends on three additional libraries:
     private function resetAnalysis():void {
       bars = null;
       beats = null;
-      uploadButton.enabled = false;
       playButton.enabled = false;
       pauseButton.enabled = false;
       remixComboBox.enabled = false;
@@ -135,8 +134,7 @@ This example depends on three additional libraries:
         calculateMd5();
       }
       else {
-        uploadButton.enabled = true;
-        promptToUpload();
+        uploadFile();
       }
     }
 
@@ -145,7 +143,7 @@ This example depends on three additional libraries:
       md5Stream = new MD5Stream();
       fileReference.data.position = 0;
       md5Bytes = new ByteArray();
-
+      progressBar.label = 'MD5';
       md5LoopTimer = setInterval(md5LoopIterate, 1);
     }
 
@@ -163,6 +161,7 @@ This example depends on three additional libraries:
       md5Bytes.length = length;
       fileReference.data.readBytes(md5Bytes, 0, length);
       md5Stream.update(md5Bytes);
+      progressBar.setProgress(fileReference.data.position, fileReference.data.length);
     }
 
     private function handleCalculateMd5Complete():void {
@@ -179,8 +178,6 @@ This example depends on three additional libraries:
     }
 
     private function metadataResponseHandler(metadata:Object):void {
-      log('loaded metatata');
-
       if (metadata.status == 'COMPLETE') {
         log('track analysis found');
         trackId = metadata.id;
@@ -194,30 +191,22 @@ This example depends on three additional libraries:
         log('track analysis has failed. try a different track');
       }
       else {
-        uploadButton.enabled = true;
         log('track analysis not found');
-        promptToUpload();
+        uploadFile();
       }
-    }
-
-    private function promptToUpload():void {
-      log('<b>UPLOAD TO CONTINUE</b>');
     }
 
     private function uploadFile():void {
       log('<b>uploading track...</b>');
-      uploadButton.enabled = false;
-      trackApi.uploadFileData({file: fileReference}, {
+      progressBar.label = 'Upload';
+      trackApi.uploadFileReference({file: fileReference, wait: 'N'}, {
         onResponse: function(track:Object):void {
           trackId = track.id;
           log('uploaded track ' + track.id);
-
-          if (track.ready) {
-            loadAnalysis();
-          }
-          else {
-            waitForAnalysis();
-          }
+          waitForAnalysis();
+        },
+        onProgress: function(e:ProgressEvent):void {
+          progressBar.setProgress(e.bytesLoaded, e.bytesTotal);
         },
         onEchoNestError: function(error:EchoNestError):void {
           log('error ' + error.code + ': ' + error.description);
