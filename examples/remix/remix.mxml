@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+This example uses the Echo Nest API to remix the track by altering the
+arrangement of the bars of the track.
+
+The remixes are based on the examples distributed with the Echo Nest remix API.
+
+This example depends on three additional libraries:
+
+  as3corelib for MD5 calculation
+  http://code.google.com/p/as3corelib/
+
+  MP3FileReferenceLoaderLib to load sound files directly from a FileReference
+  http://www.flexiblefactory.co.uk/flexible/?p=46
+
+  com.ryanberdeen.audio for the actual remixing
+  http://github.com/also/flash-audio/tree/master
+
+-->
+
 <mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();">
   <mx:Panel title="Remix Demo" width="100%" paddingTop="10" paddingRight="10" paddingBottom="10" paddingLeft="10">
     <mx:Button id="browseButton" label="Choose a song…" click="chooseFile();"/>
