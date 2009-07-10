@@ -79,6 +79,39 @@ package com.ryanberdeen.echonest.api.v3 {
     }
 
     /**
+    * Adds the standard Echo Nest Flash API event listeners to a file
+    * reference.
+    *
+    * @param options The event listener options. See
+    *        <code>createLoader()</code> for the list of available options.
+    * @param dispatcher The file reference to add the event listeners to.
+    */
+    public function addFileReferenceEventListeners(options:Object, fileReference:FileReference, responseProcessor:Function, ...responseProcessorArgs):void {
+      if (options.onComplete) {
+        fileReference.addEventListener(Event.COMPLETE, options.onComplete);
+      }
+
+      if (options.onResponse) {
+        fileReference.addEventListener(DataEvent.UPLOAD_COMPLETE_DATA, function(e:DataEvent):void {
+          try {
+            var responseXml:XML = new XML(e.data);
+            checkStatus(responseXml);
+            responseProcessorArgs.push(responseXml);
+            var response:Object = responseProcessor.apply(responseProcessor, responseProcessorArgs);
+            options.onResponse(response);
+          }
+          catch (e:EchoNestError) {
+            if (options.onEchoNestError) {
+              options.onEchoNestError(e);
+            }
+          }
+        });
+      }
+
+      addEventListeners(options, fileReference);
+    }
+
+    /**
     * Processes the response from the <code>upload</code> API method.
     *
     * <p><strong>Response Format</strong></p>
@@ -639,6 +672,30 @@ package com.ryanberdeen.echonest.api.v3 {
       var loader:URLLoader = createLoader(loaderOptions, processUploadResponse);
       loader.load(request);
       return loader;
+    }
+
+    /**
+    * Invokes the Echo Nest <code>upload</code> API method with a file
+    * reference.
+    *
+    * <p>The <code>parameters</code> object must include a <code>file</code>
+    * property, which must be a <code>FileReference</code> that may be
+    * <code>upload()</code>ed.</p>
+    *
+    * @param parameters The parameters to include in the API request.
+    * @param loaderOptions The event listener options for the loader.
+    *
+    * @see ApiSupport#createRequest()
+    * @see #processUploadResponse()
+    * @see http://developer.echonest.com/docs/method/upload/
+    */
+    public function uploadFileReference(parameters:Object, loaderOptions:Object):void {
+      var fileReference:FileReference = parameters.file;
+      delete parameters.file;
+
+      addFileReferenceEventListeners(loaderOptions, fileReference, processUploadResponse);
+      var request:URLRequest = createRequest('upload', parameters);
+      fileReference.upload(request, 'file');
     }
 
     /**
