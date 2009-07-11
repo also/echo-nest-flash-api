@@ -29,8 +29,7 @@ package com.ryanberdeen.echonest.api.v3 {
   * results of the API method. See the <code>ApiSupport.createLoader()</code>
   * method for a description of the loader options.</p>
   *
-  * <p>The methods in this class return data from the Echo Nest API in a simple
-  * array format. For a description of the response formats, see the various
+  * <p>For a description of the response formats, see the various
   * <code>process...Response()</code> methods.</p>
   *
   * <p>Be sure to set the <code>apiKey</code> property before calling any API
@@ -120,11 +119,7 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * <p><strong>Response Format</strong></p>
     *
-    * <p>Returns an array of:</p>
-    *
-    * <pre>
-    * [Number(value), Number(confidence)]
-    * </pre>
+    * <p>Returns an array of <code>NumberWithConfidence</code>.</p>
     *
     * @param name The element name of the list items.
     * @param response The response to process.
@@ -137,7 +132,7 @@ package com.ryanberdeen.echonest.api.v3 {
       var result:Array = [];
 
       for each (var item:XML in response.analysis[name]) {
-        result.push([Number(item), Number(item.@confidence)]);
+        result.push(new NumberWithConfidence(Number(item), Number(item.@confidence)));
       }
 
       return result;
@@ -171,11 +166,7 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * <p><strong>Response Format</strong></p>
     *
-    * <p>Returns:</p>
-    *
-    * <pre>
-    * Number(value)
-    * </pre>
+    * <p>Returns a <code>Number</code>.</p>
     *
     * @param name The name of the element containing the result value.
     * @param response The response to process.
@@ -215,11 +206,7 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * <p><strong>Response Format</strong></p>
     *
-    * <p>Returns:</p>
-    *
-    * <pre>
-    * [Number(value), Number(confidence)]
-    * </pre>
+    * <p>Returns a <code>NumberWithConfidence</code>.</p>
     *
     * @param name The name of the element containing the result value.
     * @param response The response to process.
@@ -228,9 +215,9 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * @return The result of processing the response.
     */
-    public function processNumberWithConfidenceResponse(name:String, response:XML):Array {
+    public function processNumberWithConfidenceResponse(name:String, response:XML):NumberWithConfidence {
       var item:XMLList = response.analysis[name];
-      return [Number(item), Number(item.@confidence)];
+      return new NumberWithConfidence(Number(item), Number(item.@confidence));
     }
 
     /**
