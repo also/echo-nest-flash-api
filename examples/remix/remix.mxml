@@ -47,8 +47,7 @@ This example depends on three additional libraries:
     import flash.media.Sound;
     import flash.net.FileReference;
     import flash.net.URLLoader;
-    import flash.utils.setTimeout;
-    import flash.utils.clearInterval;
+    import flash.utils.Timer;
 
     import mx.collections.ArrayCollection;
 
@@ -77,7 +76,7 @@ This example depends on three additional libraries:
     private var remixPlayer:SampleSourcePlayer;
     private var playing:Boolean;
 
-    private var md5LoopTimer:Number;
+    private var md5LoopTimer:Timer;
     private var md5Stream:MD5Stream;
     private var md5Bytes:ByteArray;
 
@@ -109,7 +108,10 @@ This example depends on three additional libraries:
       beats = null;
       playButton.enabled = false;
       remixComboBox.enabled = false;
-      clearInterval(md5LoopTimer);
+      if (md5LoopTimer != null) {
+        md5LoopTimer.stop();
+        md5LoopTimer = null;
+      }
 
       sound = null;
 
@@ -161,28 +163,28 @@ This example depends on three additional libraries:
       fileReference.data.position = 0;
       md5Bytes = new ByteArray();
       setStatus('Calculate MD5');
-      md5LoopTimer = setInterval(md5LoopIterate, 1);
-    }
+      md5LoopTimer = new Timer(1);
+      md5LoopTimer.addEventListener('timer', function md5LoopIterate(e:Event):void {
+        if (fileReference.data.bytesAvailable == 0) {
+          trackMd5 = md5Stream.complete();
+          md5LoopTimer.stop();
+          handleCalculateMd5Complete();
+          return;
+        }
 
-    private function md5LoopIterate():void {
-      if (fileReference.data.bytesAvailable == 0) {
-        trackMd5 = md5Stream.complete();
-        md5Stream = null;
-        clearInterval(md5LoopTimer);
-        md5Bytes = null;
-        handleCalculateMd5Complete();
-        return;
-      }
-
-      var length:int = Math.min(51200, fileReference.data.bytesAvailable);
-      md5Bytes.length = length;
-      fileReference.data.readBytes(md5Bytes, 0, length);
-      md5Stream.update(md5Bytes);
-      progressBar.setProgress(fileReference.data.position, fileReference.data.length);
+        var length:int = Math.min(51200, fileReference.data.bytesAvailable);
+        md5Bytes.length = length;
+        fileReference.data.readBytes(md5Bytes, 0, length);
+        md5Stream.update(md5Bytes);
+        progressBar.setProgress(fileReference.data.position, fileReference.data.length);
+      });
+      md5LoopTimer.start();
     }
 
     private function handleCalculateMd5Complete():void {
       log('md5 calculated ' + trackMd5);
+      md5Stream = null;
+      md5Bytes = null;
       clearStatus();
       checkStatus();
     }
