@@ -15,12 +15,12 @@ You’ll need to clone the source from github:
 Including in your project
 =========================
 
-Add both `echo-nest-flash-api/src` and `echo-nest-flash-api/lib/flash-net-utils` to your classpath. Your Flash, Flex, or mxmlc documentation tells you how to do this.
+Add both `echo-nest-flash-api/src` to your classpath. Your Flash, Flex, or mxmlc documentation tells you how to do this.
 
 Using the API
 =============
 
-echo-nest-flash-api implements all of the [Echo Nest track API methods][1]. The methods provide data in a simple array format.
+echo-nest-flash-api implements all of the [Echo Nest track API methods][1].
 
 Analysis
 --------
@@ -29,8 +29,8 @@ Analysis
     trackApi.apiKey = 'EJ1B4BFNYQOC56SGF';
 
     trackApi.getMode({id: 'music://id.echonest.com/~/TR/TRLFPPE11C3F10749F'}, {
-      onResponse: function(mode:Array):void {
-        trace('Mode: ' + mode[0] +', confidence: ' + mode[1]);  // Mode: 1, confidence: 1
+      onResponse: function(mode:NumberWithConfidence):void {
+        trace('Mode: ' + mode.value +', confidence: ' + mode.confidence);  // Mode: 1, confidence: 1
       }
     });
 

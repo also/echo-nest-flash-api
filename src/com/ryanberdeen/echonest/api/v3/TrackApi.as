@@ -292,23 +292,23 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * <p><strong>Response Format</strong></p>
     *
-    * <p>Returns an array of:</p>
-    *
-    * <pre>
-    * [Number(start), Number(duration)]
-    * </pre>
+    * <p>Returns an array of <code>Section</code>.</p>
     *
     * @param response The response to process.
     *
     * @return The result of processing the response.
     *
     * @see #getSections()
+    * @see Section
     */
     public function processSectionsResponse(response:XML):Array {
       var result:Array = [];
 
-      for each (var section:XML in response.analysis.section) {
-        result.push([Number(section.@start), Number(section.@duration)]);
+      for each (var sectionXml:XML in response.analysis.section) {
+        var section:Section = new Section();
+        section.start = Number(sectionXml.@start);
+        section.duration = Number(sectionXml.@duration);
+        result.push(section);
       }
 
       return result;
@@ -319,64 +319,51 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * <p><strong>Response Format</strong></p>
     *
-    * <p>Returns an array of:</p>
-    *
-    * <pre>
-    * [
-    *   Number(start),
-    *   Number(duration),
-    *   [
-    *     [Number(time), Number(dB)], // start
-    *     [Number(time), Number(dB)], // max
-    *     [Number(time), Number(dB)]  // only present in last segment
-    *   ],
-    *   [Number(pitch1), Number(pitch2), ... Number(pitch12)],
-    *   [Number(coeff1), Number(coeff2), ... Number(coeff12)]
-    * ]
-    * </pre>
-    *
-    * <p>For example:</p>
-    *
-    * <listing version="3.0">
-    * var segment:Array = processSegmentsResponse(xml)[42];
-    * var start:Number = segment[0];
-    * var timbre:Array = segment[4];
-    * var startDb:Number = segment[2][0][1];
-    * </listing>
+    * <p>Returns an array of <code>Segment</code>.</p>
     *
     * @param response The response to process.
     *
     * @return The result of processing the response.
     *
     * @see #getSegments()
+    * @see Segment
     */
     public function processSegmentsResponse(response:XML):Array {
       var result:Array = [];
+      var previousSegment:Segment = new Segment();  // this is never used, but eliminates an if in the loop
 
-      for each (var segment:XML in response.analysis.segment) {
-        var loudness:Array = [];
-        for each (var db:XML in segment.loudness.dB) {
-          loudness.push([Number(db.@time), Number(db)]);
-        }
+      var segmentXml:XML;
+      for each (segmentXml in response.analysis.segment) {
+        var segment:Segment = new Segment();
+
+        segment.start = segmentXml.@start;
+        segment.duration = segmentXml.@duration;
+
+        segment.startLoudness = segmentXml.loudness.dB[0];
+        previousSegment.endLoudness = segmentXml.startLoudness;
+
+        var maxLoudnessXml:XML = segmentXml.loudness.dB[1];
+        segment.maxLoudness = Number(maxLoudnessXml);
+        segment.maxLoudnessTimeOffset = maxLoudnessXml.@time;
 
         var pitches:Array = [];
-        for each (var pitch:XML in segment.pitches.pitch) {
+        for each (var pitch:XML in segmentXml.pitches.pitch) {
           pitches.push(Number(pitch));
         }
+        segment.pitches = pitches;
 
         var timbre:Array = [];
-        for each (var coeff:XML in segment.timbre.coeff) {
+        for each (var coeff:XML in segmentXml.timbre.coeff) {
           timbre.push(Number(coeff));
         }
 
-        result.push([
-          Number(segment.@start),
-          Number(segment.@duration),
-          loudness,
-          pitches,
-          timbre
-        ]);
+        segment.timbre = timbre;
+
+        previousSegment = segment;
+        result.push(segment);
       }
+
+      previousSegment.endLoudness = segmentXml.loudness.dB[2];
 
       return result;
     }
