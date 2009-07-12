@@ -31,7 +31,8 @@ This example depends on three additional libraries:
     <mx:Label text="Remix"/>
     <mx:ComboBox id="remixComboBox" width="100" dataProvider="{remixes}" close="remixComboBoxCloseHandler(event);" enabled="false"/>
     <mx:Button id="playButton" label="Play" enabled="false" click="togglePlayPause();"/>
-    <mx:TextArea id="logTextArea" width="100%" height="300" editable="false" valueCommit="logTextArea.verticalScrollPosition=logTextArea.maxVerticalScrollPosition"/>
+    <mx:ProgressBar id="positionProgressBar" barColor="0xFF0000" mode="manual" label="" width="100%" labelPlacement="right" labelWidth="0" horizontalGap="0"/>
+    <mx:TextArea id="logTextArea" width="100%" height="200" editable="false" valueCommit="logTextArea.verticalScrollPosition=logTextArea.maxVerticalScrollPosition"/>
   </mx:Panel>
 
   <mx:Script><![CDATA[
@@ -40,6 +41,7 @@ This example depends on three additional libraries:
     import com.ryanberdeen.echonest.api.v3.TrackApi
     import com.ryanberdeen.audio.ISampleSource;
     import com.ryanberdeen.audio.DiscontinuousSampleSource;
+    import com.ryanberdeen.audio.SampleRange;
     import com.ryanberdeen.audio.SampleSourcePlayer;
     import com.ryanberdeen.audio.SoundSampleSource;
 
@@ -67,6 +69,10 @@ This example depends on three additional libraries:
     private var mp3Loader:MP3FileReferenceLoader;
     private var sound:Sound;
 
+    private var md5LoopTimer:Timer;
+    private var md5Stream:MD5Stream;
+    private var md5Bytes:ByteArray;
+
     private var trackId:String;
     private var trackMd5:String;
 
@@ -75,14 +81,14 @@ This example depends on three additional libraries:
 
     private var remixPlayer:SampleSourcePlayer;
     private var playing:Boolean;
-
-    private var md5LoopTimer:Timer;
-    private var md5Stream:MD5Stream;
-    private var md5Bytes:ByteArray;
+    private var positionUpdateTimer:Timer;
 
     private function init():void {
       trackApi.apiKey = YOUR_API_KEY;
       log('<b>loaded remix demo</b>');
+
+      positionUpdateTimer = new Timer(10);
+      positionUpdateTimer.addEventListener('timer', positionUpdateTimerHandler);
     }
 
     private function log(o:Object):void {
@@ -124,6 +130,7 @@ This example depends on three additional libraries:
 
         remixPlayer = null;
       }
+      positionUpdateTimer.stop();
     }
 
     private function chooseFile():void {
@@ -340,7 +347,7 @@ This example depends on three additional libraries:
         while (beatIndex < beats.length - 1 && beats[beatIndex].value != bars[i].value) {
           beatIndex++;
         }
-        sampleRanges.push([Math.round(beats[beatIndex].value * 44100), Math.round(beats[beatIndex + 1].value * 44100)]);
+        sampleRanges.push(new SampleRange(Math.round(beats[beatIndex].value * 44100), Math.round(beats[beatIndex + 1].value * 44100)));
       }
 
       return discontinuousRemix(sampleRanges);
@@ -349,7 +356,7 @@ This example depends on three additional libraries:
     private function remixReverse():ISampleSource {
       var sampleRanges:Array = [];
       for (var i:int = beats.length - 1; i > 0; i--) {
-        sampleRanges.push([Math.round(beats[i - 1].value * 44100), Math.round(beats[i].value * 44100)]);
+        sampleRanges.push(new SampleRange(Math.round(beats[i - 1].value * 44100), Math.round(beats[i].value * 44100)));
       }
 
       return discontinuousRemix(sampleRanges);
@@ -379,14 +386,20 @@ This example depends on three additional libraries:
 
     private function play():void {
       remixPlayer.start();
+      positionUpdateTimer.start();
       playButton.label = "Pause";
       playing = true;
     }
 
     private function pause():void {
       remixPlayer.stop();
+      positionUpdateTimer.stop();
       playButton.label = "Play";
       playing = false;
+    }
+
+    private function positionUpdateTimerHandler(e:Event):void {
+      positionProgressBar.setProgress(remixPlayer.sourcePosition, sound.length * 44.1);
     }
   ]]></mx:Script>
 </mx:Application>
