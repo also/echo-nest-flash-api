@@ -4,7 +4,7 @@
  * See accompanying file LICENSE.txt
  */
 
-package com.ryanberdeen.echonest.api.v3 {
+package com.ryanberdeen.echonest.api.v3.track {
   /**
   * A number with an associated confidence value.
   */

@@ -38,7 +38,7 @@ This example depends on three additional libraries:
   <mx:Script><![CDATA[
     import com.adobe.crypto.MD5Stream;
     import com.ryanberdeen.echonest.api.v3.EchoNestError;
-    import com.ryanberdeen.echonest.api.v3.TrackApi
+    import com.ryanberdeen.echonest.api.v3.track.TrackApi
     import com.ryanberdeen.audio.ISampleSource;
     import com.ryanberdeen.audio.DiscontinuousSampleSource;
     import com.ryanberdeen.audio.SampleRange;
@@ -84,7 +84,7 @@ This example depends on three additional libraries:
     private var positionUpdateTimer:Timer;
 
     private function init():void {
-      trackApi.apiKey = YOUR_API_KEY;
+      trackApi.apiKey = '';
       log('<b>loaded remix demo</b>');
 
       positionUpdateTimer = new Timer(10);

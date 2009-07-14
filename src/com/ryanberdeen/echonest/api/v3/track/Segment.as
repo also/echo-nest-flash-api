@@ -4,7 +4,7 @@
  * See accompanying file LICENSE.txt
  */
 
-package com.ryanberdeen.echonest.api.v3 {
+package com.ryanberdeen.echonest.api.v3.track {
   /**
   * @see TrackApi#processSegmentsResponse()
   * @see http://developer.echonest.com/docs/method/get_segments/

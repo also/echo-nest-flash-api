@@ -4,7 +4,10 @@
  * See accompanying file LICENSE.txt
  */
 
-package com.ryanberdeen.echonest.api.v3 {
+package com.ryanberdeen.echonest.api.v3.track {
+  import com.ryanberdeen.echonest.api.v3.ApiSupport;
+  import com.ryanberdeen.echonest.api.v3.EchoNestError;
+
   import flash.events.DataEvent;
   import flash.events.Event;
   import flash.net.FileReference;
@@ -149,8 +152,8 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * @return The <code>URLLoader</code> being used to perform the API call.
     *
-    * @see ApiSupport#createRequest()
-    * @see ApiSupport#createLoader()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createRequest()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createLoader()
     * @see #processSimpleAnalysisListResponse()
     */
     public function getSimpleAnalysisList(name:String, parameters:Object, loaderOptions:Object):URLLoader {
@@ -189,8 +192,8 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * @return The <code>URLLoader</code> being used to perform the API call.
     *
-    * @see ApiSupport#createRequest()
-    * @see ApiSupport#createLoader()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createRequest()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createLoader()
     * @see #processNumberResponse()
     */
     public function getNumber(name:String, parameters:Object, loaderOptions:Object):URLLoader {
@@ -231,8 +234,8 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * @return The <code>URLLoader</code> being used to perform the API call.
     *
-    * @see ApiSupport#createRequest()
-    * @see ApiSupport#createLoader()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createRequest()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createLoader()
     * @see #processNumberWithConfidenceResponse()
     */
     public function getNumberWithConfidence(name:String, parameters:Object, loaderOptions:Object):URLLoader {
@@ -598,7 +601,7 @@ package com.ryanberdeen.echonest.api.v3 {
     * @param parameters The parameters to include in the API request.
     * @param loaderOptions The event listener options for the loader.
     *
-    * @see ApiSupport#createRequest()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createRequest()
     * @see #processUploadResponse()
     * @see http://developer.echonest.com/docs/method/upload/
     */
@@ -622,8 +625,8 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * @return The <code>URLLoader</code> being used to perform the API call.
     *
-    * @see ApiSupport#createRequest()
-    * @see ApiSupport#createLoader()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createRequest()
+    * @see com.ryanberdeen.echonest.api.v3.ApiSupport#createLoader()
     * @see #processUploadResponse()
     * @see http://developer.echonest.com/docs/method/upload/
     */
