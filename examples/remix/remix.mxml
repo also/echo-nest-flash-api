@@ -38,7 +38,10 @@ This example depends on three additional libraries:
   <mx:Script><![CDATA[
     import com.adobe.crypto.MD5Stream;
     import com.ryanberdeen.echonest.api.v3.EchoNestError;
-    import com.ryanberdeen.echonest.api.v3.track.TrackApi
+    import com.ryanberdeen.echonest.api.v3.EchoNestErrorEvent;
+    import com.ryanberdeen.echonest.api.v3.track.AnalysisEvent;
+    import com.ryanberdeen.echonest.api.v3.track.AnalysisLoader;
+    import com.ryanberdeen.echonest.api.v3.track.TrackApi;
     import com.ryanberdeen.audio.ISampleSource;
     import com.ryanberdeen.audio.DiscontinuousSampleSource;
     import com.ryanberdeen.audio.SampleRange;
@@ -46,6 +49,8 @@ This example depends on three additional libraries:
     import com.ryanberdeen.audio.SoundSampleSource;
 
     import flash.events.Event;
+    import flash.events.IOErrorEvent;
+    import flash.events.SecurityErrorEvent;
     import flash.media.Sound;
     import flash.net.FileReference;
     import flash.net.URLLoader;
@@ -76,6 +81,8 @@ This example depends on three additional libraries:
     private var trackId:String;
     private var trackMd5:String;
 
+    private var analysisLoader:AnalysisLoader;
+
     private var bars:Array;
     private var beats:Array;
 
@@ -84,7 +91,7 @@ This example depends on three additional libraries:
     private var positionUpdateTimer:Timer;
 
     private function init():void {
-      trackApi.apiKey = '';
+      trackApi.apiKey = YOUR_API_KEY;
       log('<b>loaded remix demo</b>');
 
       positionUpdateTimer = new Timer(10);
@@ -192,35 +199,8 @@ This example depends on three additional libraries:
       log('md5 calculated ' + trackMd5);
       md5Stream = null;
       md5Bytes = null;
-      clearStatus();
-      checkStatus();
-    }
-
-    private function checkStatus():void {
-      log('<b>checking for analysis...</b>');
-      trackApi.getMetadata({md5: trackMd5}, {
-        onResponse: metadataResponseHandler,
-        onEchoNestError: echoNestErrorHandler
-      });
-    }
-
-    private function metadataResponseHandler(metadata:Object):void {
-      if (metadata.status == 'COMPLETE') {
-        log('track analysis found');
-        trackId = metadata.id;
-        loadAnalysis();
-      }
-      else if (metadata.status == 'PENDING') {
-        log('track analysis pending');
-        waitForAnalysis();
-      }
-      else if (metadata.status == 'ERROR') {
-        log('track analysis has failed. try a different track');
-      }
-      else {
-        log('track analysis not found');
-        uploadFile();
-      }
+      setStatus('Check for analysis', true);
+      loadAnalysis({md5: trackMd5});
     }
 
     private function uploadFile():void {
@@ -230,8 +210,8 @@ This example depends on three additional libraries:
         onResponse: function(track:Object):void {
           trackId = track.id;
           log('uploaded track ' + track.id);
-          clearStatus();
-          waitForAnalysis();
+          setStatus('Wait for analysis', true);
+          loadAnalysis({id: track.id});
         },
         onProgress: function(e:ProgressEvent):void {
           progressBar.setProgress(e.bytesLoaded, e.bytesTotal);
@@ -239,86 +219,55 @@ This example depends on three additional libraries:
         onEchoNestError: function(error:EchoNestError):void {
           log('error ' + error.code + ': ' + error.description);
         },
-        onError: function(e:Event):void {
-          log(e.toString());
-        }
+        onError: errorHandler
       });
     }
 
-    private function waitForAnalysis():void {
-      log('<b>waiting for analysis...</b>');
-      setStatus('Wait for analysis', true);
-      trackApi.getMetadata({md5: trackMd5}, {
-        onResponse: function(metadata:Object):void {
-          if (metadata.status == 'PENDING') {
-            // try again in 5 seconds
-            setTimeout(waitForAnalysis, 5000);
-            log('analysis pending');
-          }
-          else if (metadata.status == 'COMPLETE') {
-            log('analysis complete');
-            clearStatus();
-            loadAnalysis();
-          }
-          else {
-            log('analysis failed');
-          }
-        },
-        onEchoNestError: function(e:EchoNestError):void {
-          if (e.code == 11) { // Analysis not ready (please try again in a few minutes)
-            // try again in 15 seconds
-            setTimeout(waitForAnalysis, 15000);
-          }
-          else {
-            clearStatus();
-            echoNestErrorHandler(e);
-          }
-        }
-      });
-    }
-
-    private function loadAnalysis():void {
+    private function loadAnalysis(parameters:Object):void {
       log('<b>loading analysis...</b>');
-      setStatus('Download analysis', true);
-      this.beats = null;
-      this.bars = null;
-      var beatsLoader:URLLoader = trackApi.getBeats({id: trackId}, {
-        onResponse: beatsLoadedHandler,
-        onEchoNestError: echoNestErrorHandler
-      });
-
-      var barsLoader:URLLoader = trackApi.getBars({id: trackId}, {
-        onResponse: barsLoadedHandler,
-        onEchoNestError: echoNestErrorHandler
-      });
+      analysisLoader = new AnalysisLoader(trackApi);
+      analysisLoader.addEventListener(AnalysisEvent.UNKNOWN, analysisUnknownHandler);
+      analysisLoader.addEventListener(AnalysisEvent.ERROR, analysisErrorHandler);
+      analysisLoader.addEventListener(AnalysisEvent.COMPLETE, analysisCompleteHandler);
+      analysisLoader.addEventListener(Event.COMPLETE, analysisLoaderCompleteHandler);
+      analysisLoader.addEventListener(EchoNestErrorEvent.ECHO_NEST_ERROR, echoNestErrorEventHandler);
+      analysisLoader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
+      analysisLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+      analysisLoader.load(parameters);
     }
 
-    private function echoNestErrorHandler(error:EchoNestError):void {
-      log('error ' + error.code + ': ' + error.description);
+    private function echoNestErrorEventHandler(error:EchoNestErrorEvent):void {
+      log('error ' + error.code + ': ' + error.message);
       clearStatus();
     }
 
-    private function beatsLoadedHandler(beats:Array):void {
-      this.beats = beats;
-      log('loaded ' + beats.length + ' beats');
-      if (bars) {
-        analysisLoadedHandler();
-      }
+    private function analysisUnknownHandler(e:Event):void {
+      log('not yet analyzed');
+      uploadFile();
     }
 
-    private function barsLoadedHandler(bars:Array):void {
-      this.bars = bars;
-      log('loaded ' + bars.length + ' bars');
-      if (beats) {
-        analysisLoadedHandler();
-      }
+    private function analysisErrorHandler(e:Event):void {
+      log('track analysis has failed. try a different track');
     }
 
-    private function analysisLoadedHandler():void {
+    private function analysisCompleteHandler(e:Event):void {
+      log('analysis complete');
+      setStatus('Download analysis', true);
+    }
+
+    private function analysisLoaderCompleteHandler(e:Event):void {
       log('analysis loaded');
+      clearStatus();
+
+      bars = analysisLoader.analysis.bars;
+      beats = analysisLoader.analysis.beats;
 
       clearStatus();
       preparePlayer();
+    }
+
+    private function errorHandler(e:Event):void {
+      log(e.toString());
     }
 
     private function preparePlayer():void {
