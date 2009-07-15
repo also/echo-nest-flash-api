@@ -60,10 +60,6 @@ textarea {
 }
 </style>
 <script type="text/javascript">
-document.observe('dom:loaded', function() {
-  swfobject.embedSWF('player.swf', 'swf', '400', '120', '9.0.0');
-});
-
 var Remix = {
   __init: function() {
     this._swf = document.getElementById('swf');
@@ -79,9 +75,11 @@ var Remix = {
     }
     catch(e) {
       alert(e);
+      return;
     }
     if (remix == null) {
       alert('remix function not found!');
+      return;
     }
     try {
       var sampleRanges = remix(this.analysis);
@@ -94,6 +92,20 @@ var Remix = {
 
   __setProgress: function(progress) {
     $('progress').style.width = 100 * progress + '%';
+  },
+
+  _scriptLoaded: function() {
+    if (remix) {
+      $('remixJs').value = remix;
+    }
+    else {
+      alert('Remix function not found in script.');
+    }
+  },
+
+  _loadScript: function() {
+    remix = null;
+    document.write('<script src="' + location.hash.substring(1) + '" onload="Remix._scriptLoaded();"><' + '/script>');
   }
 };
 </script>
@@ -102,6 +114,7 @@ var Remix = {
 
 <div id="progress-wrapper"><div id="progress" style="width: 0%;"></div></div>
 <h1>Remix</h1>
+
 <div id="left">
 <div id="swf"></div>
 <p>Edit songs with JavaScript and <a href="http://echonest.com">The Echo Nest</a>.</p>
@@ -111,14 +124,15 @@ var Remix = {
 
 <div id="credit"><a href="http://echonest.com"><img src="http://the.echonest.com/media/images/logos/140x50_lt.gif" alt="Powered By The Echo Nest"></a></div>
 </div>
+
 <textarea id="remixJs" rows="20" cols="60">function remix (analysis) {
   var bars = analysis.bars;
   var beats = analysis.beats;
   var beatIndex = 0;
   var samples = [];
 
-  for (var i = 0; i &lt; bars.length; i++) {
-    while (beatIndex &lt; beats.length - 1 &amp;&amp;
+  for (var i = 0; i < bars.length; i++) {
+    while (beatIndex < beats.length - 1 &&
            beats[beatIndex].value != bars[i].value) {
       beatIndex++;
     }
@@ -132,5 +146,11 @@ var Remix = {
   return samples;
 }</textarea>
 
+<script type="text/javascript">
+swfobject.embedSWF('player.swf', 'swf', '400', '120', '9.0.0');
+if (location.hash) {
+  Remix._loadScript();
+}
+</script>
 </body>
 </html>
