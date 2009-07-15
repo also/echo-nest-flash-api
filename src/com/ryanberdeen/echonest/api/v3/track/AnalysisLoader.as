@@ -28,6 +28,11 @@ package com.ryanberdeen.echonest.api.v3.track {
       this.parameters = parameters;
       getMetadata();
     }
+    
+    public function reload():void {
+      // TODO exception if currently loading
+      getMetadata();
+    }
 
     private function waitForAnalysis(delay:int):void {
       timer = new Timer(delay, 1);
@@ -96,7 +101,7 @@ package com.ryanberdeen.echonest.api.v3.track {
     }
 
     private function echoNestErrorHandler(error:EchoNestError):void {
-      dispatchEvent(new EchoNestErrorEvent(EchoNestErrorEvent.ECHO_NEST_ERROR, error.code, error.description));
+      dispatchEvent(error.createEvent());
     }
 
     private function beatsLoadedHandler(beats:Array):void {

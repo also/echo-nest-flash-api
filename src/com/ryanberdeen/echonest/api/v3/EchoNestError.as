@@ -31,5 +31,9 @@ package com.ryanberdeen.echonest.api.v3 {
     public function get code():int {
       return _code;
     }
+
+    public function createEvent():EchoNestErrorEvent {
+      return new EchoNestErrorEvent(EchoNestErrorEvent.ECHO_NEST_ERROR, _code, _description);
+    }
   }
 }

@@ -10,6 +10,8 @@ package com.ryanberdeen.echonest.api.v3 {
 
     public function EchoNestErrorEvent(type:String, code:int, message:String) {
       super(type, bubbles, cancelable, (code + ': ' + message));
+      _code = code;
+      _message = message;
     }
 
     public function get code():int {
