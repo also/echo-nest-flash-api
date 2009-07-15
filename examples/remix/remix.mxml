@@ -87,6 +87,9 @@ This example depends on three additional libraries:
       if (indeterminate) {
         progressBar.mode = 'event';
       }
+      else {
+        progressBar.mode = 'manual';
+      }
     }
 
     private function clearStatus():void {
