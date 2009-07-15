@@ -6,8 +6,8 @@
 <style type="text/css">
 body {
   font-family: helvetica, arial, sans-serif;
-  font-size: 18px;
-  margin: 20px 40px 0 20px;
+  font-size: 14px;
+  margin: 20px 40px 0 40px;
 }
 
 #progress-wrapper {
@@ -33,12 +33,22 @@ h1 {
 }
 
 #left {
+  width: 400px;
   float: left;
   margin-right: 20px;
 }
 
 img {
   border: none;
+}
+
+a {
+  color: #000000;
+}
+
+a:hover {
+  background-color: #222222;
+  color: #ffffff;
 }
 
 textarea {
@@ -51,7 +61,7 @@ textarea {
 </style>
 <script type="text/javascript">
 document.observe('dom:loaded', function() {
-  swfobject.embedSWF('remix.swf', 'swf', '400', '400', '9.0.0');
+  swfobject.embedSWF('player.swf', 'swf', '400', '120', '9.0.0');
 });
 
 var Remix = {
@@ -94,18 +104,25 @@ var Remix = {
 <h1>Remix</h1>
 <div id="left">
 <div id="swf"></div>
+<p>Edit songs with JavaScript and <a href="http://echonest.com">The Echo Nest</a>.</p>
+
+<p>Created by <a href="http://ryanberdeen.com">Ryan Berdeen</a>.</p>
+<p>Bugs, feedback, etc: <a href="mailto:remix@ryanberdeen.com">remix@ryanberdeen.com</a></p>
+
 <div id="credit"><a href="http://echonest.com"><img src="http://the.echonest.com/media/images/logos/140x50_lt.gif" alt="Powered By The Echo Nest"></a></div>
 </div>
-<textarea id="remixJs" rows="20" cols="100">function remix (analysis) {
+<textarea id="remixJs" rows="20" cols="60">function remix (analysis) {
   var bars = analysis.bars;
   var beats = analysis.beats;
   var beatIndex = 0;
   var samples = [];
 
   for (var i = 0; i &lt; bars.length; i++) {
-    while (beatIndex &lt; beats.length - 1 &amp;&amp; beats[beatIndex].value != bars[i].value) {
+    while (beatIndex &lt; beats.length - 1 &amp;&amp;
+           beats[beatIndex].value != bars[i].value) {
       beatIndex++;
     }
+
     samples.push(
       beats[beatIndex].value,
       beats[beatIndex + 1].value
