@@ -152,7 +152,7 @@ This example depends on three additional libraries:
       trackLoader.analysisLoader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
       trackLoader.analysisLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
 
-      trackLoader.load();
+      trackLoader.load(TrackApi.BEATS, TrackApi.BARS);
     }
 
     private function loadingSoundHandler(e:TrackLoaderEvent):void {

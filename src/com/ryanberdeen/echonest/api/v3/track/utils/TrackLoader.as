@@ -59,7 +59,8 @@ package com.ryanberdeen.echonest.api.v3.track.utils {
       return _sound;
     }
 
-    public function load():void {
+    public function load(...properties):void {
+      _analysisLoader.properties = properties;
       _fileReference.addEventListener(Event.SELECT, fileReferenceSelectHandler);
       _fileReference.browse();
     }

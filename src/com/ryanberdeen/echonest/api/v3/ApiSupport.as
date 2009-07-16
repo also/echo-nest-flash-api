@@ -121,7 +121,12 @@ package com.ryanberdeen.echonest.api.v3 {
             checkStatus(responseXml);
             responseProcessorArgs.push(responseXml);
             var response:Object = responseProcessor.apply(responseProcessor, responseProcessorArgs);
-            options.onResponse(response);
+            if (options.onResponseArgument) {
+              options.onResponse(options.onResponseArgument, response);
+            }
+            else {
+              options.onResponse(response);
+            }
           }
           catch (e:EchoNestError) {
             if (options.onEchoNestError) {

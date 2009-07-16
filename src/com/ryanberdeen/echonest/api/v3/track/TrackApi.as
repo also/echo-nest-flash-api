@@ -52,6 +52,38 @@ package com.ryanberdeen.echonest.api.v3.track {
   * </listing>
   */
   public class TrackApi extends ApiSupport {
+    public static const BARS:String = "bars";
+    public static const BEATS:String = "beats";
+    public static const DURATION:String = "duration";
+    public static const END_OF_FADE_IN:String = "endOfFadeIn";
+    public static const KEY:String = "key";
+    public static const LOUDNESS:String = "loudness";
+    public static const METADATA:String = "metadata";
+    public static const MODE:String = "mode";
+    public static const SECTIONS:String = "sections";
+    public static const SEGMENTS:String = "segments";
+    public static const START_OF_FADE_OUT:String = "startOfFadeOut";
+    public static const TATUMS:String = "tatums";
+    public static const TEMPO:String = "tempo";
+    public static const TIME_SIGNATURE:String = "timeSignature";
+
+    public static const ALL_PROPERTIES:Array = [
+      BARS,
+      BEATS,
+      DURATION,
+      END_OF_FADE_IN,
+      KEY,
+      LOUDNESS,
+      METADATA,
+      MODE,
+      SECTIONS,
+      SEGMENTS,
+      START_OF_FADE_OUT,
+      TATUMS,
+      TEMPO,
+      TIME_SIGNATURE
+    ];
+
     /**
     * Adds the standard Echo Nest Flash API event listeners to a file
     * reference.

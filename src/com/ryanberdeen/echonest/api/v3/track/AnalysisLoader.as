@@ -10,13 +10,18 @@ package com.ryanberdeen.echonest.api.v3.track {
   public class AnalysisLoader extends EventDispatcher {
     private var trackApi:TrackApi;
     private var timer:Timer;
+    private var apiLoaders:Array;
+    private var apiLoadersComplete:int;
 
     private var parameters:Object;
+    private var _properties:Object;
 
     private var _analysis:Object;
 
     public function AnalysisLoader(trackApi:TrackApi):void {
       this.trackApi = trackApi;
+      _properties = TrackApi.ALL_PROPERTIES;
+      apiLoaders = [];
       _analysis = {};
     }
 
@@ -24,11 +29,20 @@ package com.ryanberdeen.echonest.api.v3.track {
       return _analysis;
     }
 
+    public function set properties(properties:Array):void {
+      if (properties == null || properties.length == 0) {
+        _properties = TrackApi.ALL_PROPERTIES;
+      }
+      else {
+        _properties = properties;
+      }
+    }
+
     public function load(parameters:Object):void {
       this.parameters = parameters;
       getMetadata();
     }
-    
+
     public function reload():void {
       // TODO exception if currently loading
       getMetadata();
@@ -83,17 +97,19 @@ package com.ryanberdeen.echonest.api.v3.track {
     }
 
     private function loadAnalysis():void {
-      var beatsLoader:URLLoader = trackApi.getBeats(parameters, {
-        onResponse: beatsLoadedHandler,
-        onEchoNestError: echoNestErrorHandler,
-        onError: errorHandler
-      });
+      apiLoadersComplete = 0;
 
-      var barsLoader:URLLoader = trackApi.getBars(parameters, {
-        onResponse: barsLoadedHandler,
-        onEchoNestError: echoNestErrorHandler,
-        onError: errorHandler
-      });
+      for each (var propertyName:String in _properties) {
+        var methodName:String = "get" + propertyName.substring(0, 1).toUpperCase() + propertyName.substring(1);
+        var apiLoader:URLLoader = trackApi[methodName](parameters, {
+            onResponse: responseHandler,
+            onResponseArgument: propertyName,
+            onEchoNestError: echoNestErrorHandler,
+            onError: errorHandler
+          }
+        );
+        apiLoaders.push(apiLoader);
+      }
     }
 
     private function errorHandler(event:Event):void {
@@ -104,16 +120,10 @@ package com.ryanberdeen.echonest.api.v3.track {
       dispatchEvent(error.createEvent());
     }
 
-    private function beatsLoadedHandler(beats:Array):void {
-      _analysis.beats = beats;
-      if (_analysis.bars) {
-        analysisLoadedHandler();
-      }
-    }
-
-    private function barsLoadedHandler(bars:Array):void {
-      _analysis.bars = bars;
-      if (_analysis.beats) {
+    private function responseHandler(propertyName:String, response:Object):void {
+      _analysis[propertyName] = response;
+      apiLoadersComplete++;
+      if (apiLoadersComplete == apiLoaders.length) {
         analysisLoadedHandler();
       }
     }
