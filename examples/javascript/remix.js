@@ -14,7 +14,6 @@ var Remix = {
   },
 
   __setAnalysis: function(analysis) {
-      try {
     var duration = analysis.metadata.duration;
     if (analysis.bars) {
         analysis.bars = AudioQuantumList.fromEvents('bar', analysis.bars, duration);
@@ -29,7 +28,6 @@ var Remix = {
         analysis.tatums.analysis = analysis;
     }
     this.analysis = analysis;
-}catch(e){alert(e);}
   },
 
   __remix: function() {
@@ -97,7 +95,6 @@ var Remix = {
   },
 
   _scriptLoaded: function() {
-    alert('loaded');
     if (remix) {
       this._remixJsElt.value = remix;
     }

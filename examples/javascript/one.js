@@ -1,10 +1,10 @@
 function remix (analysis) {
   var bars = analysis.beats;
-  var samples = [];
+  var result = [];
 
   for (var i = 0; i < bars.length; i++) {
-    samples.push(bars[i].children()[0]);
+    result.push(bars[i].children()[0]);
   }
 
-  return samples;
+  return result;
 }
