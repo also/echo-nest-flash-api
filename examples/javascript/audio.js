@@ -1,8 +1,10 @@
 function AudioQuantum() {
-
+    this.start = 0;
+    this.end = 0;
+    this.duration = 0;
 }
 
-AudioQuantum.prototype = {
+extend(AudioQuantum.prototype, {
     setDuration: function(duration) {
         this.duration = duration;
         this.end = this.start + duration;
@@ -13,11 +15,11 @@ AudioQuantum.prototype = {
         this.duration = this.end - this.start;
     },
 
-    children:  function() {
+    children: function() {
         var downers = this.container.analysis[AudioQuantum.childrenAttributes[this.container.kind]];
         return downers.that(selection.areContainedBy(this));
     }
-}
+});
 
 AudioQuantum.childrenAttributes = {
     section: 'bars',
@@ -25,26 +27,29 @@ AudioQuantum.childrenAttributes = {
     beat: 'tatums'
 };
 
-var AudioQuantumList = {
-    extendArray: function(array) {
-        array.that = function(filter) {
-            var result = AudioQuantumList.extendArray([]);
-            result.kind = this.kind;
+function AudioQuantumList(kind) {
+    var array = extend([], AudioQuantumList.Methods);
+    array.kind = kind;
+    return array;
+}
 
-            for (var i = 0; i < this.length; i++) {
-                var aq = this[i];
-                if (filter(aq)) {
-                    result.push(aq);
-                }
+AudioQuantumList.Methods = {
+    that: function(filter) {
+        var result = new AudioQuantumList(this.kind)
+
+        for (var i = 0; i < this.length; i++) {
+            var aq = this[i];
+            if (filter(aq)) {
+                result.push(aq);
             }
-            return result;
-        };
-        return array;
-    },
+        }
+        return result;
+    }
+};
 
+extend(AudioQuantumList, {
     fromEvents: function(kind, events, duration) {
-        var aqs = AudioQuantumList.extendArray([]);
-        aqs.kind = kind;
+        var aqs = new AudioQuantumList(kind);
 
         var previousAq = new AudioQuantum();
         previousAq.start = 0;
@@ -65,8 +70,7 @@ var AudioQuantumList = {
     },
 
     fromSegments: function(segments) {
-        var aqs = AudioQuantumList.extendArray([]);
-        aqs.kind = 'segment';
+        var aqs = new AudioQuantumList('segment');
         for (var i = 0; i < segments.length; i++) {
             var segment = segments[i];
             var aq = new AudioQuantum();
@@ -84,13 +88,4 @@ var AudioQuantumList = {
         }
         return aqs;
     }
-};
-
-
-endLoudness: 0
-maxLoudness: -54.548
-maxLoudnessTimeOffset: 0.1219
-pitches: Array
-start: 0
-startLoudness: -60
-timbre: Array
+});
