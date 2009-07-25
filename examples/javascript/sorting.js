@@ -35,7 +35,7 @@ var sorting = {
     * value in the timbre vector.
     */
     timbreValue: function(index) {
-        return function(x) {x.timbre[index];};
+        return function(x) {return x.timbre[index];};
     },
 
     /**
@@ -44,7 +44,7 @@ var sorting = {
     * value in the pitch vector.
     */
     pitchValue: function(index) {
-        return function(x) {x.pitches[index];};
+        return function(x) {return x.pitches[index];};
     },
 
     /**
@@ -54,7 +54,7 @@ var sorting = {
     * from the reference `AudioSegment`.
     */
     pitchDistanceFrom: function(seg) {
-        return function(x) {sum(map(_diffSquared, seg.pitches, x.pitches));};
+        return function(x) {return sorting._sumDiffSquared(seg.pitches, x.pitches);};
     },
 
     /**
@@ -64,7 +64,7 @@ var sorting = {
     * from the reference `AudioSegment`.
     */
     timbreDistanceFrom: function(seg) {
-        return function(x) {sum(map(_diffSquared, seg.timbre, x.timbre));};
+        return function(x) {return sorting._sumDiffSquared(seg.timbre, x.timbre);};
     },
 
     /**
@@ -72,7 +72,7 @@ var sorting = {
     * fast way of judging the relative noisiness of a segment.
     */
     noisiness: function(x) {
-        return sum(x.pitches);
+        return x.pitches.sum();
     },
 
     /* local helper functions: */
@@ -80,7 +80,11 @@ var sorting = {
     /**
     * Local helper function. The square of the difference between a and b.
     */
-    _diffSquared: function(a, b) {
-        return pow(a-b, 2);
+    _sumDiffSquared: function(a, b) {
+        var result = 0;
+        for (var i = 0; i < a.length; i++) {
+            result += sorting._diffSquared(Math.pow(a[i] - b[i], 2));
+        }
+        return result;
     }
 };

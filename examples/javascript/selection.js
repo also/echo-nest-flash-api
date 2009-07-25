@@ -139,7 +139,7 @@ var selection = {
     lieImmediatelyBefore: function(aq) {
         return function(x) {
             return x.end == aq.start;
-        }
+        };
     },
 
     /**

@@ -3,6 +3,10 @@ function AudioAnalysis(analysis) {
 
     var duration = this.metadata.duration;
 
+    if (this.sections) {
+        this.sections = AudioQuantumList.fromEvents(this.sections, duration);
+        this.sections.analysis = sections;
+    }
     if (this.bars) {
         this.bars = AudioQuantumList.fromEvents('bar', this.bars, duration);
         this.bars.analysis = this;
@@ -19,7 +23,7 @@ function AudioAnalysis(analysis) {
         this.segments = AudioQuantumList.fromSegments(this.segments);
         this.segments.analysis = this;
     }
-};
+}
 
 function AudioQuantum() {
     this.start = 0;
@@ -58,7 +62,7 @@ function AudioQuantumList(kind) {
 
 AudioQuantumList.Methods = {
     that: function(filter) {
-        var result = new AudioQuantumList(this.kind)
+        var result = new AudioQuantumList(this.kind);
 
         for (var i = 0; i < this.length; i++) {
             var aq = this[i];
@@ -88,7 +92,19 @@ extend(AudioQuantumList, {
             previousAq.setEnd(aq.start);
             previousAq = aq;
         }
+        // TODO audio.py duplicates the duration of the second-to-last event
         previousAq.setEnd(duration);
+        return aqs;
+    },
+
+    fromSections: function(sections) {
+        var aqs = new AudioQuantumList('section');
+        for (var i = 0; i < sections.length; i++) {
+            var section = section[i];
+            var aq = new AudioQuantum();
+            aq.start = section.start;
+            aq.setDuration(section.duration);
+        }
         return aqs;
     },
 

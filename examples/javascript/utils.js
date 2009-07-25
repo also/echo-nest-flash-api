@@ -4,3 +4,10 @@ function extend(destination, source) {
     }
     return destination;
 }
+
+Array.prototype.sum = function() {
+    var result = 0;
+    for (var i = 0; i < this.length; i++) {
+        result += this[i];
+    }
+};
