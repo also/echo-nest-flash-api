@@ -32,7 +32,6 @@ This example depends on three additional libraries:
       <mx:Button id="remixButton" label="Remix" enabled="false" click="remixButtonHandler();"/>
       <mx:Button id="playButton" label="Play" enabled="false" click="togglePlayPause();"/>
     </mx:HBox>
-    <!--<mx:TextArea id="logTextArea" width="100%" height="200" editable="false" valueCommit="logTextArea.verticalScrollPosition=logTextArea.maxVerticalScrollPosition"/>-->
   </mx:VBox>
 
   <mx:Script><![CDATA[
@@ -66,16 +65,11 @@ This example depends on three additional libraries:
 
     private function init():void {
       trackApi.apiKey = YOUR_API_KEY;
-      log('<b>loaded remix demo</b>');
 
       positionUpdateTimer = new Timer(10);
       positionUpdateTimer.addEventListener('timer', positionUpdateTimerHandler);
       ExternalInterface.addCallback('setRemixString', setRemixString);
       callJs('init');
-    }
-
-    private function log(o:Object):void {
-      //logTextArea.htmlText += o + "\n";
     }
 
     private function setStatus(status:String, indeterminate:Boolean = false):void {
@@ -125,8 +119,8 @@ This example depends on three additional libraries:
       trackLoader.analysisLoader.addEventListener(AnalysisEvent.COMPLETE, analysisCompleteHandler);
       trackLoader.analysisLoader.addEventListener(Event.COMPLETE, analysisLoaderCompleteHandler);
       trackLoader.analysisLoader.addEventListener(EchoNestErrorEvent.ECHO_NEST_ERROR, echoNestErrorEventHandler);
-      trackLoader.analysisLoader.addEventListener(IOErrorEvent.IO_ERROR, errorHandler);
-      trackLoader.analysisLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorHandler);
+      trackLoader.analysisLoader.addEventListener(IOErrorEvent.IO_ERROR, errorEventHandler);
+      trackLoader.analysisLoader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, errorEventHandler);
 
       trackLoader.load();
     }
@@ -173,7 +167,7 @@ This example depends on three additional libraries:
     }
 
     private function analysisErrorHandler(e:Event):void {
-      log('track analysis has failed. try a different track');
+      // TODO
     }
 
     private function analysisCompleteHandler(e:Event):void {
@@ -193,12 +187,16 @@ This example depends on three additional libraries:
     }
 
     private function echoNestErrorEventHandler(error:EchoNestErrorEvent):void {
-      log('error ' + error.code + ': ' + error.message);
+      // TODO
       clearStatus();
     }
 
-    private function errorHandler(e:Event):void {
-      log(e.toString());
+    private function errorEventHandler(e:Event):void {
+      // TODO
+    }
+
+    private function errorHandler(e:Error):void {
+      // TODO
     }
 
     private function resetPlayer():void {
@@ -230,10 +228,8 @@ This example depends on three additional libraries:
     }
 
     private function playerSoundCompleteHandler(e:Event):void {
-      try {
       positionUpdateTimer.stop();
       preparePlayer();
-      }catch(e:Error) {log(e.getStackTrace())}
     }
 
     private function discontinuousRemix(sampleRanges:Array):ISampleSource {
@@ -256,11 +252,14 @@ This example depends on three additional libraries:
 
     private function play():void {
       try {
-      remixPlayer.start();
-      positionUpdateTimer.start();
-      playButton.label = "Pause";
-      playing = true;
-      }catch(e:Error) {log(e.getStackTrace())}
+        remixPlayer.start();
+        positionUpdateTimer.start();
+        playButton.label = "Pause";
+        playing = true;
+      }
+      catch(e:Error) {
+        errorHandler(e);
+      }
     }
 
     private function pause():void {
