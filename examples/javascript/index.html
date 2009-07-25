@@ -29,27 +29,17 @@
 
 <textarea id="remixJs" rows="20" cols="60">function remix (analysis) {
   var bars = analysis.bars;
-  var beats = analysis.beats;
-  var beatIndex = 0;
   var samples = [];
 
   for (var i = 0; i &lt; bars.length; i++) {
-    while (beatIndex &lt; beats.length - 1 &amp;&amp;
-           beats[beatIndex].value != bars[i].value) {
-      beatIndex++;
-    }
-
-    samples.push(
-      beats[beatIndex].value,
-      beats[beatIndex + 1].value
-    );
+    samples.push(bars[i].children()[0]);
   }
 
   return samples;
 }</textarea>
 </div>
 <script type="text/javascript">
-init();
+Remix.init();
 </script>
 </body>
 </html>

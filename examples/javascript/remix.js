@@ -1,30 +1,35 @@
-function init() {
-  swfobject.embedSWF('player.swf', 'swf', '400', '120', '9.0.0');
-  if (location.hash) {
-    Remix._loadScript();
-  }
-  initCanvas();
-}
-
 var Remix = {
-  __init: function() {
-    this._swf = document.getElementById('swf');
+  init: function() {
+    swfobject.embedSWF('player.swf', 'swf', '400', '120', '9.0.0');
     this._remixJsElt = document.getElementById('remixJs');
     this._progressElt = document.getElementById('progress');
+    if (location.hash) {
+      Remix._loadScript();
+    }
+    initCanvas();
+  },
+
+  __init: function() {
+    this._swf = document.getElementById('swf');
   },
 
   __setAnalysis: function(analysis) {
+      try {
     var duration = analysis.metadata.duration;
     if (analysis.bars) {
-        analysis.bars = AudioQuantumList.fromEvents('bars', analysis.bars, duration);
+        analysis.bars = AudioQuantumList.fromEvents('bar', analysis.bars, duration);
+        analysis.bars.analysis = analysis;
     }
     if (analysis.beats) {
-        analysis.beats = AudioQuantumList.fromEvents('bars', analysis.beats, duration);
+        analysis.beats = AudioQuantumList.fromEvents('beat', analysis.beats, duration);
+        analysis.beats.analysis = analysis;
     }
     if (analysis.tatums) {
-        analysis.tatums = AudioQuantumList.fromEvents('bars', analysis.tatums, duration);
+        analysis.tatums = AudioQuantumList.fromEvents('tatum', analysis.tatums, duration);
+        analysis.tatums.analysis = analysis;
     }
     this.analysis = analysis;
+}catch(e){alert(e);}
   },
 
   __remix: function() {
@@ -57,14 +62,14 @@ var Remix = {
         this.sampleRanges = [];
         for (i = 0; i < sampleRanges.length; i++) {
           var aq = sampleRanges[i];
-          this.sampleRanges.push(aq.start, aq.start + aq.duration);
+          this.sampleRanges.push(aq.start, aq.end);
         }
       }
       else {
         this.sampleRanges = sampleRanges;
       }
 
-      if (sampleRanges.length % 2 != 00) {
+      if (this.sampleRanges.length % 2 != 0) {
         alert('remix must return an even number of positions');
         return;
       }
@@ -92,8 +97,9 @@ var Remix = {
   },
 
   _scriptLoaded: function() {
+    alert('loaded');
     if (remix) {
-      this._remixJsElt = remix;
+      this._remixJsElt.value = remix;
     }
     else {
       alert('Remix function not found in script.');
