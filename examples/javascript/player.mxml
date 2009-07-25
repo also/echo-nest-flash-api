@@ -180,7 +180,7 @@ This example depends on three additional libraries:
       bars = trackLoader.analysisLoader.analysis.bars;
       beats = trackLoader.analysisLoader.analysis.beats;
 
-      callJs('setAnalysis', {bars: bars, beats: beats});
+      callJs('setAnalysis', trackLoader.analysisLoader.analysis);
       clearStatus();
       remixButton.enabled = true;
       preparePlayer();
