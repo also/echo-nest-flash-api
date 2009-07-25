@@ -11,6 +11,7 @@ package com.ryanberdeen.echonest.api.v3.track.utils {
   import flash.events.IOErrorEvent;
   import flash.events.SecurityErrorEvent;
   import flash.media.Sound;
+  import flash.net.FileFilter;
   import flash.net.FileReference;
 
   import org.audiofx.mp3.MP3FileReferenceLoader;
@@ -62,7 +63,7 @@ package com.ryanberdeen.echonest.api.v3.track.utils {
     public function load(...properties):void {
       _analysisLoader.properties = properties;
       _fileReference.addEventListener(Event.SELECT, fileReferenceSelectHandler);
-      _fileReference.browse();
+      _fileReference.browse([new FileFilter("MP3 Files", "*.mp3")]);
     }
 
     private function fileReferenceSelectHandler(e:Event):void {
