@@ -19,11 +19,20 @@ body {
   width: 50%;
 }
 
+#canvas {
+  position: absolute;
+  top: 20px;
+  left: 0;
+}
+
 h1 {
-  position: relative;
+  position: absolute;
   font-size: 110px;
-  margin-top: 40px;
-  margin-bottom: 40px;
+  top: 0px;
+}
+
+#remix {
+  margin-top: 340px;
 }
 
 #left {

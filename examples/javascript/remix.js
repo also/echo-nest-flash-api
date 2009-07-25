@@ -3,6 +3,7 @@ function init() {
   if (location.hash) {
     Remix._loadScript();
   }
+  initCanvas();
 }
 
 var Remix = {
@@ -10,6 +11,7 @@ var Remix = {
     this._swf = document.getElementById('swf');
     this._remixJsElt = document.getElementById('remixJs');
     this._progressElt = document.getElementById('progress');
+
   },
 
   __setAnalysis: function(analysis) {
@@ -29,8 +31,35 @@ var Remix = {
       return;
     }
     try {
-      var sampleRanges = remix(this.analysis);
-      this._swf.setRemixString(sampleRanges.join(','))
+      this.sampleRanges = remix(this.analysis);
+
+      if (!this.sampleRanges) {
+        alert('remix must return an array of positions');
+        return;
+      }
+
+      if (this.sampleRanges.length == 0) {
+        alert('remix must return at least one range');
+        return;
+      }
+
+      if (this.sampleRanges.length % 2 != 00) {
+        alert('remix must return an even number of positions');
+        return;
+      }
+
+      remixDuration = 0;
+      for (var i = 0; i < this.sampleRanges.length - 2; i += 2) {
+        var start = this.sampleRanges[i];
+        var end = this.sampleRanges[i + 1];
+        if (end <= start) {
+          alert('end position ' + (i / 2 + 1) + ' is not after start position');
+          return;
+        }
+        remixDuration += end - start;
+      }
+      draw();
+      this._swf.setRemixString(this.sampleRanges.join(','))
     }
     catch (e) {
       alert(e);
@@ -55,3 +84,86 @@ var Remix = {
     document.write('<script src="' + location.hash.substring(1) + '" onload="Remix._scriptLoaded();"><' + '/script>');
   }
 };
+
+var canvas;
+var ctx;
+
+function initCanvas() {
+  canvas = document.getElementById('canvas');
+  canvas.width = window.innerWidth;
+  canvas.addEventListener('click', canvasClickHandler);
+  ctx = canvas.getContext('2d');
+  window.addEventListener('resize', function() {
+    canvas.width = window.innerWidth;
+    if (Remix.sampleRanges) {
+      draw();
+    }
+  });
+}
+
+function canvasClickHandler() {
+  if (draw == drawCurves) {
+    draw = drawGraph;
+  }
+  else {
+    draw = drawCurves;
+  }
+  if (Remix.sampleRanges) {
+    draw();
+  }
+}
+
+var remixDuration;
+function drawCurves() {
+  var segments = Remix.sampleRanges;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.globalCompositeOperation = "darker";
+
+  var maxOriginalPosition = 0;
+
+  var scale = canvas.width / Math.max(remixDuration, Remix.analysis.metadata.duration);
+
+  var remixPosition = 0;
+  for (var i = 0; i < segments.length; i += 2) {
+    var start = segments[i];
+    var end = segments[i + 1];
+    var duration = end - start;
+    var top = start + duration / 2;
+    var bottom = remixPosition + duration / 2;
+    ctx.beginPath();
+    ctx.strokeStyle = '#00aeef';
+    ctx.lineWidth = duration * scale ;
+    ctx.moveTo(top * scale, 0);
+    ctx.bezierCurveTo(top * scale, 200, bottom * scale, canvas.height - 200, bottom * scale, canvas.height);
+    ctx.stroke();
+    remixPosition += duration;
+  }
+}
+
+function drawGraph() {
+  var segments = Remix.sampleRanges;
+  ctx.fillStyle = '#222222';
+  ctx.globalCompositeOperation = "source-over";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  var maxOriginalPosition = 0;
+
+  var xScale = canvas.width / Remix.analysis.metadata.duration;
+  var yScale = canvas.height / remixDuration;
+
+  var remixPosition = 0;
+  for (var i = 0; i < segments.length - 1; i += 2) {
+    var start = segments[i];
+    var end = segments[i + 1];
+    var duration = end - start;
+    ctx.beginPath();
+    ctx.strokeStyle = '#00aeef';
+    ctx.lineWidth = 1;
+    ctx.moveTo(start * xScale, canvas.height - (remixPosition * yScale));
+    remixPosition += duration;
+    ctx.lineTo(end * xScale, canvas.height - (remixPosition * yScale));
+    ctx.stroke();
+  }
+}
+
+var draw = drawCurves;
