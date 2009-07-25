@@ -18,24 +18,7 @@ var Remix = {
   },
 
   __setAnalysis: function(analysis) {
-    var duration = analysis.metadata.duration;
-    if (analysis.bars) {
-        analysis.bars = AudioQuantumList.fromEvents('bar', analysis.bars, duration);
-        analysis.bars.analysis = analysis;
-    }
-    if (analysis.beats) {
-        analysis.beats = AudioQuantumList.fromEvents('beat', analysis.beats, duration);
-        analysis.beats.analysis = analysis;
-    }
-    if (analysis.tatums) {
-        analysis.tatums = AudioQuantumList.fromEvents('tatum', analysis.tatums, duration);
-        analysis.tatums.analysis = analysis;
-    }
-    if (analysis.segments) {
-        analysis.segments = AudioQuantumList.fromSegments(analysis.segments);
-        analysis.segments.analysis = analysis;
-    }
-    this.analysis = analysis;
+    this.analysis = new AudioAnalysis(analysis);
   },
 
   __remix: function() {

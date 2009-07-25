@@ -1,3 +1,26 @@
+function AudioAnalysis(analysis) {
+    extend(this, analysis);
+
+    var duration = this.metadata.duration;
+
+    if (this.bars) {
+        this.bars = AudioQuantumList.fromEvents('bar', this.bars, duration);
+        this.bars.analysis = this;
+    }
+    if (this.beats) {
+        this.beats = AudioQuantumList.fromEvents('beat', this.beats, duration);
+        this.beats.analysis = this;
+    }
+    if (this.tatums) {
+        this.tatums = AudioQuantumList.fromEvents('tatum', this.tatums, duration);
+        this.tatums.analysis = this;
+    }
+    if (this.segments) {
+        this.segments = AudioQuantumList.fromSegments(this.segments);
+        this.segments.analysis = this;
+    }
+};
+
 function AudioQuantum() {
     this.start = 0;
     this.end = 0;
