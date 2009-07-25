@@ -7,6 +7,10 @@ var Remix = {
       Remix._loadScript();
     }
     initCanvas();
+
+    // add selection and sorting functions to global scope
+    extend(window, selection);
+    extend(window, sorting);
   },
 
   __init: function() {
