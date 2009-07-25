@@ -84,12 +84,13 @@ This example depends on three additional libraries:
       if (indeterminate) {
         progressBar.mode = 'event';
       }
+      else {
+        progressBar.mode = 'manual';
+      }
     }
 
     private function clearStatus():void {
-      progressBar.label = '';
-      progressBar.indeterminate = false;
-      progressBar.mode = 'manual';
+      setStatus('');
     }
 
     private function resetAnalysis():void {
