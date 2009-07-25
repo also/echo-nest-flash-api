@@ -8,6 +8,8 @@ function init() {
 var Remix = {
   __init: function() {
     this._swf = document.getElementById('swf');
+    this._remixJsElt = document.getElementById('remixJs');
+    this._progressElt = document.getElementById('progress');
   },
 
   __setAnalysis: function(analysis) {
@@ -16,7 +18,7 @@ var Remix = {
 
   __remix: function() {
     try {
-      eval($('remixJs').value);
+      eval(this._remixJsElt.value);
     }
     catch(e) {
       alert(e);
@@ -28,7 +30,7 @@ var Remix = {
     }
     try {
       var sampleRanges = remix(this.analysis);
-      this._swf.setRemixJson(Object.toJSON(sampleRanges))
+      this._swf.setRemixString(sampleRanges.join(','))
     }
     catch (e) {
       alert(e);
@@ -36,12 +38,12 @@ var Remix = {
   },
 
   __setProgress: function(progress) {
-    $('progress').style.width = 100 * progress + '%';
+    this._progressElt.style.width = 100 * progress + '%';
   },
 
   _scriptLoaded: function() {
     if (remix) {
-      $('remixJs').value = remix;
+      this._remixJsElt = remix;
     }
     else {
       alert('Remix function not found in script.');

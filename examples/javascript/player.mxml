@@ -70,7 +70,7 @@ This example depends on three additional libraries:
 
       positionUpdateTimer = new Timer(10);
       positionUpdateTimer.addEventListener('timer', positionUpdateTimerHandler);
-      ExternalInterface.addCallback('setRemixJson', setRemixJson);
+      ExternalInterface.addCallback('setRemixString', setRemixString);
       callJs('init');
     }
 
@@ -283,21 +283,24 @@ This example depends on three additional libraries:
       callJs('remix');
     }
 
-    private function setRemixJson(json:String):void {
-      var array:Array = JSON.decode(json);
+    private function setRemixString(string:String):void {
+      setRemixArray(string.split(','));
+    }
+
+    private function setRemixArray(array:Array):void {
       var result:Array = [];
       for (var i:int = 0; i < array.length - 1; i++) {
-        result.push(new SampleRange(Math.round(array[i] * 44100), Math.round(array[++i] * 44100)));
+        result.push(new SampleRange(Math.round(Number(array[i]) * 44100), Math.round(Number(array[++i]) * 44100)));
       }
 
       setRemix(result);
-      play();
     }
 
     private function setRemix(sampleRanges:Array):void {
       samples = sampleRanges;
       remixPlayer.sampleSource = discontinuousRemix(sampleRanges);
       preparePlayer();
+      play();
     }
   ]]></mx:Script>
 </mx:Application>
