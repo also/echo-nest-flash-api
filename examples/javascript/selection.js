@@ -109,7 +109,7 @@ var selection = {
     */
     havePitchMax: function(pitchmax) {
         return function(x) {
-            return _isMaxPitch(pitchmax, x.pitches);
+            return selection._isMaxPitch(pitchmax, x.pitches);
         };
     },
 
@@ -123,7 +123,7 @@ var selection = {
         return function(x) {
             var pitches = x.pitches;
             for (var i = 0; i < pitchesmax.length; i++) {
-                if (_isMaxPitch(pitchesmax[i], x.pitches)) {
+                if (selection._isMaxPitch(pitchesmax[i], x.pitches)) {
                     return true;
                 }
             }

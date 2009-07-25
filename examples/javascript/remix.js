@@ -27,6 +27,10 @@ var Remix = {
         analysis.tatums = AudioQuantumList.fromEvents('tatum', analysis.tatums, duration);
         analysis.tatums.analysis = analysis;
     }
+    if (analysis.segments) {
+        analysis.segments = AudioQuantumList.fromSegments(analysis.segments);
+        analysis.segments.analysis = analysis;
+    }
     this.analysis = analysis;
   },
 

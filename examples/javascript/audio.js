@@ -1,12 +1,22 @@
 function AudioQuantum() {
-    this.setEnd = function(end) {
+
+}
+
+AudioQuantum.prototype = {
+    setDuration: function(duration) {
+        this.duration = duration;
+        this.end = this.start + duration;
+    },
+
+    setEnd: function(end) {
         this.end = end;
         this.duration = this.end - this.start;
-    };
-    this.children = function() {
+    },
+
+    children:  function() {
         var downers = this.container.analysis[AudioQuantum.childrenAttributes[this.container.kind]];
         return downers.that(selection.areContainedBy(this));
-    };
+    }
 }
 
 AudioQuantum.childrenAttributes = {
@@ -52,5 +62,35 @@ var AudioQuantumList = {
         }
         previousAq.setEnd(duration);
         return aqs;
+    },
+
+    fromSegments: function(segments) {
+        var aqs = AudioQuantumList.extendArray([]);
+        aqs.kind = 'segment';
+        for (var i = 0; i < segments.length; i++) {
+            var segment = segments[i];
+            var aq = new AudioQuantum();
+
+            aq.start = aq.value = segment.start;
+            aq.setDuration(segment.duration);
+            aq.pitches = segment.pitches;
+            aq.timbre = segment.timbre;
+            aq.loudnessBegin = segment.startLoudness;
+            aq.loudnessMax = segment.maxLoudness;
+            aq.timeLoudnessMax = segment.maxLoudnessTimeOffset;
+            aq.loudnessEnd = segment.endLoudness;
+            aq.container = aqs;
+            aqs.push(aq);
+        }
+        return aqs;
     }
 };
+
+
+endLoudness: 0
+maxLoudness: -54.548
+maxLoudnessTimeOffset: 0.1219
+pitches: Array
+start: 0
+startLoudness: -60
+timbre: Array
