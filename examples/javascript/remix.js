@@ -11,14 +11,24 @@ var Remix = {
     this._swf = document.getElementById('swf');
     this._remixJsElt = document.getElementById('remixJs');
     this._progressElt = document.getElementById('progress');
-
   },
 
   __setAnalysis: function(analysis) {
+    var duration = analysis.metadata.duration;
+    if (analysis.bars) {
+        analysis.bars = AudioQuantumList.fromEvents('bars', analysis.bars, duration);
+    }
+    if (analysis.beats) {
+        analysis.beats = AudioQuantumList.fromEvents('bars', analysis.beats, duration);
+    }
+    if (analysis.tatums) {
+        analysis.tatums = AudioQuantumList.fromEvents('bars', analysis.tatums, duration);
+    }
     this.analysis = analysis;
   },
 
   __remix: function() {
+    var i;
     try {
       eval(this._remixJsElt.value);
     }
@@ -31,25 +41,36 @@ var Remix = {
       return;
     }
     try {
-      this.sampleRanges = remix(this.analysis);
+      var sampleRanges = remix(this.analysis);
 
-      if (!this.sampleRanges) {
+      if (!sampleRanges) {
         alert('remix must return an array of positions');
         return;
       }
 
-      if (this.sampleRanges.length == 0) {
+      if (sampleRanges.length == 0) {
         alert('remix must return at least one range');
         return;
       }
 
-      if (this.sampleRanges.length % 2 != 00) {
+      if (sampleRanges[0].start) {  // does this look like an array of AudioQuantums?
+        this.sampleRanges = [];
+        for (i = 0; i < sampleRanges.length; i++) {
+          var aq = sampleRanges[i];
+          this.sampleRanges.push(aq.start, aq.start + aq.duration);
+        }
+      }
+      else {
+        this.sampleRanges = sampleRanges;
+      }
+
+      if (sampleRanges.length % 2 != 00) {
         alert('remix must return an even number of positions');
         return;
       }
 
       remixDuration = 0;
-      for (var i = 0; i < this.sampleRanges.length - 2; i += 2) {
+      for (i = 0; i < this.sampleRanges.length - 2; i += 2) {
         var start = this.sampleRanges[i];
         var end = this.sampleRanges[i + 1];
         if (end <= start) {
