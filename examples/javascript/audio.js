@@ -4,8 +4,8 @@ function AudioAnalysis(analysis) {
     var duration = this.metadata.duration;
 
     if (this.sections) {
-        this.sections = AudioQuantumList.fromEvents(this.sections, duration);
-        this.sections.analysis = sections;
+        this.sections = AudioQuantumList.fromSections(this.sections);
+        this.sections.analysis = this;
     }
     if (this.bars) {
         this.bars = AudioQuantumList.fromEvents('bar', this.bars, duration);
@@ -42,17 +42,47 @@ extend(AudioQuantum.prototype, {
         this.duration = this.end - this.start;
     },
 
+    parent: function() {
+        // TODO handle error
+        var uppers = this.container.analysis[AudioQuantum.parentAttributes[this.container.kind]];
+        return uppers.that(selection.overlap(this))[0];
+    },
+
     children: function() {
+        // TODO handle error
         var downers = this.container.analysis[AudioQuantum.childrenAttributes[this.container.kind]];
         return downers.that(selection.areContainedBy(this));
+    },
+
+    group: function() {
+        var parent = this.parent();
+        if (parent) {
+            return parent.children();
+        }
+        else {
+            return this.container;
+        }
+    },
+
+    localContext: function() {
+        var group = this.group();
+        return [group.indexOf(this), group.length];
     }
 });
 
-AudioQuantum.childrenAttributes = {
-    section: 'bars',
-    bar: 'beats',
-    beat: 'tatums'
-};
+extend(AudioQuantum, {
+    parentAttributes: {
+        bar: 'sections',
+        beat: 'bars',
+        tatum: 'beats'
+    },
+
+    childrenAttributes: {
+        section: 'bars',
+        bar: 'beats',
+        beat: 'tatums'
+    }
+});
 
 function AudioQuantumList(kind) {
     var array = extend([], AudioQuantumList.Methods);
@@ -69,6 +99,27 @@ AudioQuantumList.Methods = {
             if (filter(aq)) {
                 result.push(aq);
             }
+        }
+        return result;
+    },
+
+    orderedBy: function(fn, descending) {
+        var result = new AudioQuantumList(this.kind);
+        result.push.apply(result, this);
+        result.sort(function(a, b) {
+            var aa = fn(a);
+            var bb = fn(b);
+            if (a > b) {
+                return 1;
+            }
+            if (a < b) {
+                return -1;
+            }
+            return 0;
+        });
+        // TODO
+        if (descending) {
+            result.reverse();
         }
         return result;
     }
@@ -100,10 +151,13 @@ extend(AudioQuantumList, {
     fromSections: function(sections) {
         var aqs = new AudioQuantumList('section');
         for (var i = 0; i < sections.length; i++) {
-            var section = section[i];
+            var section = sections[i];
             var aq = new AudioQuantum();
+
             aq.start = section.start;
             aq.setDuration(section.duration);
+            aq.container = aqs;
+            aqs.push(aq);
         }
         return aqs;
     },

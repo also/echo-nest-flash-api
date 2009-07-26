@@ -83,7 +83,7 @@ var sorting = {
     _sumDiffSquared: function(a, b) {
         var result = 0;
         for (var i = 0; i < a.length; i++) {
-            result += sorting._diffSquared(Math.pow(a[i] - b[i], 2));
+            result += Math.pow(a[i] - b[i], 2);
         }
         return result;
     }
