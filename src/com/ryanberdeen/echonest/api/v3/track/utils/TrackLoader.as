@@ -35,6 +35,7 @@ package com.ryanberdeen.echonest.api.v3.track.utils {
     public function TrackLoader(trackApi:TrackApi) {
       this.trackApi = trackApi;
       _fileReference = new FileReference();
+      _fileReference.addEventListener(Event.SELECT, fileReferenceSelectHandler);
       _md5Calculator = new MD5Calculator();
       _analysisLoader = new AnalysisLoader(trackApi);
       _alwaysUpload = false;
@@ -62,7 +63,6 @@ package com.ryanberdeen.echonest.api.v3.track.utils {
 
     public function load(...properties):void {
       _analysisLoader.properties = properties;
-      _fileReference.addEventListener(Event.SELECT, fileReferenceSelectHandler);
       _fileReference.browse([new FileFilter("MP3 Files", "*.mp3")]);
     }
 
