@@ -1,0 +1,1719 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="../../../../../../style.css" type="text/css" media="screen">
+<link rel="stylesheet" href="../../../../../../print.css" type="text/css" media="print">
+<meta content="TrackApi,com.ryanberdeen.echonest.api.v3.track.TrackApi,ALL_PROPERTIES,BARS,BEATS,DURATION,END_OF_FADE_IN,KEY,LOUDNESS,METADATA,MODE,SECTIONS,SEGMENTS,START_OF_FADE_OUT,TATUMS,TEMPO,TIME_SIGNATURE,addFileReferenceEventListeners,getBars,getBeats,getDuration,getEndOfFadeIn,getKey,getLoudness,getMetadata,getMode,getNumber,getNumberWithConfidence,getSections,getSegments,getSimpleAnalysisList,getStartOfFadeOut,getTatums,getTempo,getTimeSignature,processMetadataResponse,processNumberResponse,processNumberWithConfidenceResponse,processSectionsResponse,processSegmentsResponse,processSimpleAnalysisListResponse,processUploadResponse,upload,uploadFileReference" name="keywords">
+<title>com.ryanberdeen.echonest.api.v3.track.TrackApi</title>
+</head>
+<body>
+<script type="text/javascript" language="javascript" src="../../../../../../asdoc.js"></script><script type="text/javascript" language="javascript" src="../../../../../../cookies.js"></script><script type="text/javascript" language="javascript">
+<!--
+				asdocTitle = 'TrackApi - API Documentation';
+				var baseRef = '../../../../../../';
+				window.onload = configPage;
+			--></script>
+<table style="display:none" id="titleTable" cellspacing="0" cellpadding="0" class="titleTable">
+<tr>
+<td align="left" class="titleTableTitle">API Documentation</td><td align="right" class="titleTableTopNav"><a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../package-summary.html">All&nbsp;Packages</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../all-classes.html')" href="../../../../../../class-summary.html">All&nbsp;Classes</a>&nbsp;|&nbsp;<a onclick="loadClassListFrame('../../../../../../index-list.html')" href="../../../../../../all-index-A.html">Index</a>&nbsp;|&nbsp;<a href="../../../../../../index.html?com/ryanberdeen/echonest/api/v3/track/TrackApi.html&amp;com/ryanberdeen/echonest/api/v3/track/class-list.html" id="framesLink1">Frames</a><a onclick="parent.location=document.location" href="" style="display:none" id="noFramesLink1">No&nbsp;Frames</a></td><td rowspan="3" align="right" class="titleTableLogo"><img alt="Adobe Logo" title="Adobe Logo" class="logoImage" src="../../../../../../images/logo.jpg"></td>
+</tr>
+<tr class="titleTableRow2">
+<td align="left" id="subTitle" class="titleTableSubTitle">Class&nbsp;TrackApi</td><td align="right" id="subNav" class="titleTableSubNav"><a href="#propertySummary">Properties</a>&nbsp;| <a href="#methodSummary">Methods</a>&nbsp;| <a href="#constantSummary">Constants</a></td>
+</tr>
+<tr class="titleTableRow3">
+<td colspan="2">&nbsp;</td>
+</tr>
+</table>
+<script type="text/javascript" language="javascript">
+<!--
+if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Class TrackApi"); titleBar_setSubNav(true,true,false,false,false,false,true,false,false,false,false,false,false,false);}
+--></script>
+<div class="MainContent">
+<table cellspacing="0" cellpadding="0" class="classHeaderTable">
+<tr>
+<td class="classHeaderTableLabel">Package</td><td><a onclick="javascript:loadClassListFrame('class-list.html')" href="package-detail.html">com.ryanberdeen.echonest.api.v3.track</a></td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Class</td><td class="classSignature">public class TrackApi</td>
+</tr>
+<tr>
+<td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">TrackApi <img class="inheritArrow" alt="Inheritance" title="Inheritance" src="../../../../../../images/inherit-arrow.gif"> <a href="../ApiSupport.html">ApiSupport</a></td>
+</tr>
+</table>
+<p></p>
+  Methods to interact with the Echo Nest track API.
+    <p>All of the API methods in this class accept basically the same
+  parameters. The <code>parameters</code> parameter contains the parameters
+  to pass to the Echo Nest method. For most methods, this will be
+  <strong><code>id</code></strong> or <strong><code>md5</code></strong>.
+  The <code>api_key</code> and <code>version</code> parameters will always be
+  set.</p>
+    <p>The <code>loaderOptions</code> parameter contains the event listeners
+  for the loading process. Most importantly, the
+  <strong><code>onResponse</code></strong> method will be called with the
+  results of the API method. See the <code>ApiSupport.createLoader()</code>
+  method for a description of the loader options.</p>
+    <p>For a description of the response formats, see the various
+  <code>process...Response()</code> methods.</p>
+    <p>Be sure to set the <code>apiKey</code> property before calling any API
+  methods.</p>
+    <p></p>
+<br>
+<span class="label">Example</span>
+<br>This example shows how to retrieve the modality of a track.
+    <div class='listing'><pre>
+  var trackApi:TrackApi = new TrackApi();
+  trackApi.apiKey = 'EJ1B4BFNYQOC56SGF';
+    trackApi.getMode({id: 'music://id.echonest.com/~/TR/TRLFPPE11C3F10749F'}, {
+    onResponse: function(mode:Array):void {
+      trace('Mode: ' + mode[0] +', confidence: ' + mode[1]);  // Mode: 1, confidence: 1
+    }
+  });
+  </pre></div>
+  <p></p>
+<br>
+<hr>
+</div>
+<a name="propertySummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Properties</div>
+<div class="showHideLinks">
+<div class="hideInheritedProperty" id="hideInheritedProperty">
+<a onclick="javascript:setInheritedVisible(false,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Properties</a>
+</div>
+<div class="showInheritedProperty" id="showInheritedProperty">
+<a onclick="javascript:setInheritedVisible(true,'Property');" href="#propertySummary" class="showHideLink"><img src="../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Properties</a>
+</div>
+</div>
+<table id="summaryTableProperty" class="summaryTable hideInheritedProperty" cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Property</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="hideInheritedProperty">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../ApiSupport.html#apiKey">apiKey</a> : String<div class="summaryTableDescription">
+    The API key to use for Echo Nest API requests.</div>
+</td><td class="summaryTableOwnerCol"><a href="../ApiSupport.html">ApiSupport</a></td>
+</tr>
+</table>
+</div>
+<a name="methodSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Methods</div>
+<div class="showHideLinks">
+<div class="hideInheritedMethod" id="hideInheritedMethod">
+<a onclick="javascript:setInheritedVisible(false,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Methods</a>
+</div>
+<div class="showInheritedMethod" id="showInheritedMethod">
+<a onclick="javascript:setInheritedVisible(true,'Method');" href="#methodSummary" class="showHideLink"><img src="../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Methods</a>
+</div>
+</div>
+<table id="summaryTableMethod" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#addFileReferenceEventListeners()">addFileReferenceEventListeners</a>(options:Object, fileReference:FileReference, responseProcessor:Function, ... responseProcessorArgs):void</div>
+<div class="summaryTableDescription">
+    Adds the standard Echo Nest Flash API event listeners to a file
+    reference.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../ApiSupport.html#checkStatus()">checkStatus</a>(response:XML):void</div>
+<div class="summaryTableDescription">
+    Throws an <code>EchoNestError</code> if the status indicates an error.</div>
+</td><td class="summaryTableOwnerCol"><a href="../ApiSupport.html">ApiSupport</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../ApiSupport.html#createLoader()">createLoader</a>(options:Object, responseProcessor:Function, ... responseProcessorArgs):URLLoader</div>
+<div class="summaryTableDescription">
+    Creates a loader with event listeners.</div>
+</td><td class="summaryTableOwnerCol"><a href="../ApiSupport.html">ApiSupport</a></td>
+</tr>
+<tr class="hideInheritedMethod">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="../ApiSupport.html#createRequest()">createRequest</a>(method:String, parameters:Object):URLRequest</div>
+<div class="summaryTableDescription">
+    Creates a request for an Echo Nest API method call with a set of
+    parameters.</div>
+</td><td class="summaryTableOwnerCol"><a href="../ApiSupport.html">ApiSupport</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getBars()">getBars</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_bars</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getBeats()">getBeats</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_beats</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getDuration()">getDuration</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_duration</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getEndOfFadeIn()">getEndOfFadeIn</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_end_of_fade_in</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getKey()">getKey</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_key</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getLoudness()">getLoudness</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_loudness</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getMetadata()">getMetadata</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_metadata</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getMode()">getMode</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_mode</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getNumber()">getNumber</a>(name:String, parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes an Echo Nest API method that returns a number.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getNumberWithConfidence()">getNumberWithConfidence</a>(name:String, parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes an Echo Nest API method that returns a number with a confidence
+    value.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getSections()">getSections</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_sections</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getSegments()">getSegments</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_segments</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getSimpleAnalysisList()">getSimpleAnalysisList</a>(name:String, parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes an Echo Nest API method that returns a list of numbers with
+    confidence values.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getStartOfFadeOut()">getStartOfFadeOut</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_start_of_fade_out</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getTatums()">getTatums</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_tatums</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getTempo()">getTempo</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_tempo</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#getTimeSignature()">getTimeSignature</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>get_time_signature</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processMetadataResponse()">processMetadataResponse</a>(response:XML):Object</div>
+<div class="summaryTableDescription">
+    Processes the response from the <code>get_metadata</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processNumberResponse()">processNumberResponse</a>(name:String, response:XML):Number</div>
+<div class="summaryTableDescription">
+    Processes the response from an Echo Nest API method that returns a
+    number.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processNumberWithConfidenceResponse()">processNumberWithConfidenceResponse</a>(name:String, response:XML):<a href="../track/NumberWithConfidence.html">NumberWithConfidence</a>
+</div>
+<div class="summaryTableDescription">
+    Processes the response from an Echo Nest API method that returns a number
+    with a confidence value.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processSectionsResponse()">processSectionsResponse</a>(response:XML):Array</div>
+<div class="summaryTableDescription">
+    Processes the response from the <code>get_sections</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processSegmentsResponse()">processSegmentsResponse</a>(response:XML):Array</div>
+<div class="summaryTableDescription">
+    Processes the response from the <code>get_segments</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processSimpleAnalysisListResponse()">processSimpleAnalysisListResponse</a>(name:String, response:XML):Array</div>
+<div class="summaryTableDescription">
+    Processes the response from an Echo Nest API method that returns a list
+    of numbers with confidence values.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#processUploadResponse()">processUploadResponse</a>(response:XML):Object</div>
+<div class="summaryTableDescription">
+    Processes the response from the <code>upload</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#upload()">upload</a>(parameters:Object, loaderOptions:Object):URLLoader</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>upload</code> API method.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
+<a class="signatureLink" href="#uploadFileReference()">uploadFileReference</a>(parameters:Object, loaderOptions:Object):void</div>
+<div class="summaryTableDescription">
+    Invokes the Echo Nest <code>upload</code> API method with a file
+    reference.</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+</table>
+</div>
+<a name="constantSummary"></a>
+<div class="summarySection">
+<div class="summaryTableTitle">Public Constants</div>
+<div class="showHideLinks">
+<div class="hideInheritedConstant" id="hideInheritedConstant">
+<a onclick="javascript:setInheritedVisible(false,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../../../images/expanded.gif" class="showHideLinkImage"> Hide Inherited Public Constants</a>
+</div>
+<div class="showInheritedConstant" id="showInheritedConstant">
+<a onclick="javascript:setInheritedVisible(true,'Constant');" href="#constantSummary" class="showHideLink"><img src="../../../../../../images/collapsed.gif" class="showHideLinkImage"> Show Inherited Public Constants</a>
+</div>
+</div>
+<table id="summaryTableConstant" class="summaryTable " cellpadding="3" cellspacing="0">
+<tr>
+<th>&nbsp;</th><th colspan="2">Constant</th><th class="summaryTableOwnerCol">Defined&nbsp;by</th>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#ALL_PROPERTIES">ALL_PROPERTIES</a> : Array<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="hideInheritedConstant">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol"><img class="inheritedSummaryImage" title="Inherited" alt="Inherited" src="../../../../../../images/inheritedSummary.gif"></td><td class="summaryTableSignatureCol"><a class="signatureLink" href="../ApiSupport.html#API_VERSION">API_VERSION</a> : int = 3<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol"><a href="../ApiSupport.html">ApiSupport</a></td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#BARS">BARS</a> : String = "bars"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#BEATS">BEATS</a> : String = "beats"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#DURATION">DURATION</a> : String = "duration"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#END_OF_FADE_IN">END_OF_FADE_IN</a> : String = "endOfFadeIn"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#KEY">KEY</a> : String = "key"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#LOUDNESS">LOUDNESS</a> : String = "loudness"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#METADATA">METADATA</a> : String = "metadata"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#MODE">MODE</a> : String = "mode"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#SECTIONS">SECTIONS</a> : String = "sections"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#SEGMENTS">SEGMENTS</a> : String = "segments"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#START_OF_FADE_OUT">START_OF_FADE_OUT</a> : String = "startOfFadeOut"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#TATUMS">TATUMS</a> : String = "tatums"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#TEMPO">TEMPO</a> : String = "tempo"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><a class="signatureLink" href="#TIME_SIGNATURE">TIME_SIGNATURE</a> : String = "timeSignature"<div class="summaryTableDescription">[static]</div>
+</td><td class="summaryTableOwnerCol">TrackApi</td>
+</tr>
+</table>
+</div>
+<script type="text/javascript" language="javascript">
+<!--
+showHideInherited();
+--></script>
+<div class="MainContent">
+<a name="methodDetail"></a>
+<div class="detailSectionHeader">Method detail</div>
+<a name="addFileReferenceEventListeners()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">addFileReferenceEventListeners</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function addFileReferenceEventListeners(options:Object, fileReference:FileReference, responseProcessor:Function, ... responseProcessorArgs):void</code><p>
+    Adds the standard Echo Nest Flash API event listeners to a file
+    reference.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">options</span>:Object</code> &mdash; The event listener options. See
+           <code>createLoader()</code> for the list of available options.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">fileReference</span>:FileReference</code> &mdash; The file reference to add the event listeners to.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">responseProcessor</span>:Function</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code>... <span class="label">responseProcessorArgs</span></code></td>
+</tr>
+</table>
+</div>
+<a name="getBars()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getBars</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getBars(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_bars</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getSimpleAnalysisList()" target="">getSimpleAnalysisList()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_bars/" target="mm_external">http://developer.echonest.com/docs/method/get_bars/</a>
+</div>
+</div>
+<a name="getBeats()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getBeats</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getBeats(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_beats</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getSimpleAnalysisList()" target="">getSimpleAnalysisList()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_beats/" target="mm_external">http://developer.echonest.com/docs/method/get_beats/</a>
+</div>
+</div>
+<a name="getDuration()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getDuration</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getDuration(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_duration</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumber()" target="">getNumber()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_duration/" target="mm_external">http://developer.echonest.com/docs/method/get_duration/</a>
+</div>
+</div>
+<a name="getEndOfFadeIn()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getEndOfFadeIn</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getEndOfFadeIn(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_end_of_fade_in</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumber()" target="">getNumber()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_end_of_fade_in/" target="mm_external">http://developer.echonest.com/docs/method/get_end_of_fade_in/</a>
+</div>
+</div>
+<a name="getKey()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getKey</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getKey(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_key</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumberWithConfidence()" target="">getNumberWithConfidence()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_key/" target="mm_external">http://developer.echonest.com/docs/method/get_key/</a>
+</div>
+</div>
+<a name="getLoudness()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getLoudness</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getLoudness(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_loudness</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumber()" target="">getNumber()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_loudness/" target="mm_external">http://developer.echonest.com/docs/method/get_loudness/</a>
+</div>
+</div>
+<a name="getMetadata()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getMetadata</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getMetadata(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_metadata</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#processMetadataResponse()" target="">processMetadataResponse()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_metadata/" target="mm_external">http://developer.echonest.com/docs/method/get_metadata/</a>
+</div>
+</div>
+<a name="getMode()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getMode</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getMode(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_mode</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumberWithConfidence()" target="">getNumberWithConfidence()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_mode/" target="mm_external">http://developer.echonest.com/docs/method/get_mode/</a>
+</div>
+</div>
+<a name="getNumber()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getNumber</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getNumber(name:String, parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes an Echo Nest API method that returns a number.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the type of item to get. For example for
+           <code>get_duration</code>, the name is <code>duration</code>.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../../v3/ApiSupport.html#createRequest()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createRequest()</a>
+<br>
+<a href="../../v3/ApiSupport.html#createLoader()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createLoader()</a>
+<br>
+<a href="../track/TrackApi.html#processNumberResponse()" target="">processNumberResponse()</a>
+</div>
+</div>
+<a name="getNumberWithConfidence()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getNumberWithConfidence</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getNumberWithConfidence(name:String, parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes an Echo Nest API method that returns a number with a confidence
+    value.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the type of item to get. For example for
+           <code>get_duration</code>, the name is <code>duration</code>.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../../v3/ApiSupport.html#createRequest()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createRequest()</a>
+<br>
+<a href="../../v3/ApiSupport.html#createLoader()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createLoader()</a>
+<br>
+<a href="../track/TrackApi.html#processNumberWithConfidenceResponse()" target="">processNumberWithConfidenceResponse()</a>
+</div>
+</div>
+<a name="getSections()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getSections</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getSections(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_sections</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#processSectionsResponse()" target="">processSectionsResponse()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_sections/" target="mm_external">http://developer.echonest.com/docs/method/get_sections/</a>
+</div>
+</div>
+<a name="getSegments()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getSegments</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getSegments(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_segments</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#processSegmentsResponse()" target="">processSegmentsResponse()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_segments/" target="mm_external">http://developer.echonest.com/docs/method/get_segments/</a>
+</div>
+</div>
+<a name="getSimpleAnalysisList()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getSimpleAnalysisList</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getSimpleAnalysisList(name:String, parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes an Echo Nest API method that returns a list of numbers with
+    confidence values.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The singular name of the type of item to get. For example, for
+           <code>get_bars</code>, the name is <code>bar</code>.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../../v3/ApiSupport.html#createRequest()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createRequest()</a>
+<br>
+<a href="../../v3/ApiSupport.html#createLoader()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createLoader()</a>
+<br>
+<a href="../track/TrackApi.html#processSimpleAnalysisListResponse()" target="">processSimpleAnalysisListResponse()</a>
+</div>
+</div>
+<a name="getStartOfFadeOut()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getStartOfFadeOut</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getStartOfFadeOut(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_start_of_fade_out</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumber()" target="">getNumber()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_start_of_fade_out/" target="mm_external">http://developer.echonest.com/docs/method/get_start_of_fade_out/</a>
+</div>
+</div>
+<a name="getTatums()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTatums</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getTatums(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_tatums</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getSimpleAnalysisList()" target="">getSimpleAnalysisList()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_tatums/" target="mm_external">http://developer.echonest.com/docs/method/get_tatums/</a>
+</div>
+</div>
+<a name="getTempo()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTempo</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getTempo(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_tempo</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumberWithConfidence()" target="">getNumberWithConfidence()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_tempo/" target="mm_external">http://developer.echonest.com/docs/method/get_tempo/</a>
+</div>
+</div>
+<a name="getTimeSignature()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">getTimeSignature</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function getTimeSignature(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>get_time_signature</code> API method.
+        </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumberWithConfidence()" target="">getNumberWithConfidence()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/get_time_signature/" target="mm_external">http://developer.echonest.com/docs/method/get_time_signature/</a>
+</div>
+</div>
+<a name="processMetadataResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processMetadataResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processMetadataResponse(response:XML):Object</code><p>
+    Processes the response from the <code>get_metadata</code> API method.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns:</p>
+        <pre>
+    {
+      bitrate:    Number(bitrate),
+      duration:   Number(duration),
+      samplerate: Number(samplerate),
+      status:     String(status),
+      artist:     String(artist),
+      release:    String(release),
+      title:      String(title)
+    }
+    </pre>
+        <p>Any additional tags present in the XML will be included in the
+    response object as strings.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Object</code> &mdash; The result of processing the response.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getMetadata()" target="">getMetadata()</a>
+</div>
+</div>
+<a name="processNumberResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processNumberResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processNumberResponse(name:String, response:XML):Number</code><p>
+    Processes the response from an Echo Nest API method that returns a
+    number.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns a <code>Number</code>.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the element containing the result value.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Number</code> &mdash; The result of processing the response.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumber()" target="">getNumber()</a>
+</div>
+</div>
+<a name="processNumberWithConfidenceResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processNumberWithConfidenceResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processNumberWithConfidenceResponse(name:String, response:XML):<a href="../track/NumberWithConfidence.html">NumberWithConfidence</a></code><p>
+    Processes the response from an Echo Nest API method that returns a number
+    with a confidence value.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns a <code>NumberWithConfidence</code>.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The name of the element containing the result value.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code><a href="../track/NumberWithConfidence.html">NumberWithConfidence</a></code> &mdash; 
+                        The result of processing the response.
+    
+                        
+                     </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getNumberWithConfidence()" target="">getNumberWithConfidence()</a>
+</div>
+</div>
+<a name="processSectionsResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processSectionsResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processSectionsResponse(response:XML):Array</code><p>
+    Processes the response from the <code>get_sections</code> API method.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns an array of <code>Section</code>.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Array</code> &mdash; The result of processing the response.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getSections()" target="">getSections()</a>
+<br>
+<a href="Section.html" target="">Section</a>
+</div>
+</div>
+<a name="processSegmentsResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processSegmentsResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processSegmentsResponse(response:XML):Array</code><p>
+    Processes the response from the <code>get_segments</code> API method.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns an array of <code>Segment</code>.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Array</code> &mdash; The result of processing the response.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getSegments()" target="">getSegments()</a>
+<br>
+<a href="Segment.html" target="">Segment</a>
+</div>
+</div>
+<a name="processSimpleAnalysisListResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processSimpleAnalysisListResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processSimpleAnalysisListResponse(name:String, response:XML):Array</code><p>
+    Processes the response from an Echo Nest API method that returns a list
+    of numbers with confidence values.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns an array of <code>NumberWithConfidence</code>.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">name</span>:String</code> &mdash; The element name of the list items.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Array</code> &mdash; The result of processing the response.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#getSimpleAnalysisList()" target="">getSimpleAnalysisList()</a>
+</div>
+</div>
+<a name="processUploadResponse()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">processUploadResponse</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function processUploadResponse(response:XML):Object</code><p>
+    Processes the response from the <code>upload</code> API method.
+        </p><p><strong>Response Format</strong></p>
+        <p>Returns:</p>
+        <pre>
+    {
+      id:    String(id),
+      md5:   String(md5),
+      ready: Boolean(ready)
+    }
+    </pre>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">response</span>:XML</code> &mdash; The response to process.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>Object</code> &mdash; The result of processing the response.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../track/TrackApi.html#upload()" target="">upload()</a>
+<br>
+<a href="../track/TrackApi.html#uploadFileData()" target="">uploadFileData()</a>
+</div>
+</div>
+<a name="upload()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">upload</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function upload(parameters:Object, loaderOptions:Object):URLLoader</code><p>
+    Invokes the Echo Nest <code>upload</code> API method.
+        </p><p>This method is for uploads using the <code>url</code> parameter.
+    To upload a file, use <code>uploadFileReference()</code>.
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>URLLoader</code> &mdash; The <code>URLLoader</code> being used to perform the API call.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../../v3/ApiSupport.html#createRequest()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createRequest()</a>
+<br>
+<a href="../../v3/ApiSupport.html#createLoader()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createLoader()</a>
+<br>
+<a href="../track/TrackApi.html#processUploadResponse()" target="">processUploadResponse()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/upload/" target="mm_external">http://developer.echonest.com/docs/method/upload/</a>
+</div>
+</div>
+<a name="uploadFileReference()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">uploadFileReference</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public function uploadFileReference(parameters:Object, loaderOptions:Object):void</code><p>
+    Invokes the Echo Nest <code>upload</code> API method with a file
+    reference.
+        </p><p>The <code>parameters</code> object must include a <code>file</code>
+    property, which must be a <code>FileReference</code> that may be
+    <code>upload()</code>ed.</p>
+        <span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">parameters</span>:Object</code> &mdash; The parameters to include in the API request.
+    </td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">loaderOptions</span>:Object</code> &mdash; The event listener options for the loader.
+        </td>
+</tr>
+</table>
+<p>
+<span class="label">See also</span>
+</p>
+<div class="seeAlso">
+<a href="../../v3/ApiSupport.html#createRequest()" target="">com.ryanberdeen.echonest.api.v3.ApiSupport.createRequest()</a>
+<br>
+<a href="../track/TrackApi.html#processUploadResponse()" target="">processUploadResponse()</a>
+<br>
+<a href="http://developer.echonest.com/docs/method/upload/" target="mm_external">http://developer.echonest.com/docs/method/upload/</a>
+</div>
+</div>
+<a name="constantDetail"></a>
+<div class="detailSectionHeader">Constant detail</div>
+<a name="ALL_PROPERTIES"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ALL_PROPERTIES</td><td class="detailHeaderType">constant</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const ALL_PROPERTIES:Array</code>
+</div>
+<a name="BARS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">BARS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const BARS:String = "bars"</code>
+</div>
+<a name="BEATS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">BEATS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const BEATS:String = "beats"</code>
+</div>
+<a name="DURATION"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">DURATION</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const DURATION:String = "duration"</code>
+</div>
+<a name="END_OF_FADE_IN"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">END_OF_FADE_IN</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const END_OF_FADE_IN:String = "endOfFadeIn"</code>
+</div>
+<a name="KEY"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">KEY</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const KEY:String = "key"</code>
+</div>
+<a name="LOUDNESS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">LOUDNESS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const LOUDNESS:String = "loudness"</code>
+</div>
+<a name="METADATA"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">METADATA</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const METADATA:String = "metadata"</code>
+</div>
+<a name="MODE"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">MODE</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const MODE:String = "mode"</code>
+</div>
+<a name="SECTIONS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">SECTIONS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const SECTIONS:String = "sections"</code>
+</div>
+<a name="SEGMENTS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">SEGMENTS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const SEGMENTS:String = "segments"</code>
+</div>
+<a name="START_OF_FADE_OUT"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">START_OF_FADE_OUT</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const START_OF_FADE_OUT:String = "startOfFadeOut"</code>
+</div>
+<a name="TATUMS"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">TATUMS</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const TATUMS:String = "tatums"</code>
+</div>
+<a name="TEMPO"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">TEMPO</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const TEMPO:String = "tempo"</code>
+</div>
+<a name="TIME_SIGNATURE"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">TIME_SIGNATURE</td><td class="detailHeaderType">constant</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static const TIME_SIGNATURE:String = "timeSignature"</code>
+</div>
+<br>
+<br>
+<hr>
+<br>
+<p></p>
+<center class="copyright"> 
+</center>
+</div>
+</body>
+</html>
+<!-- -->
