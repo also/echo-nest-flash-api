@@ -119,6 +119,7 @@ package com.ryanberdeen.echonest.api.v3.track.utils {
 
     private function loadAnalysis(parameters:Object):void {
       _analysisLoader.addEventListener(AnalysisEvent.UNKNOWN, analysisUnknownHandler);
+      _analysisLoader.addEventListener(AnalysisEvent.UNAVAILABLE, analysisUnknownHandler);
       _analysisLoader.load(parameters);
     }
 

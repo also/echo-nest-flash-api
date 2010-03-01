@@ -79,6 +79,9 @@ package com.ryanberdeen.echonest.api.v3.track {
       else if (metadata.status == 'UNKNOWN') {
         dispatchEvent(new AnalysisEvent(AnalysisEvent.UNKNOWN));
       }
+      else if (metadata.status == 'UNAVAILABLE') {
+          dispatchEvent(new AnalysisEvent(AnalysisEvent.UNAVAILABLE));
+      }
       else {
         dispatchEvent(new AnalysisEvent(AnalysisEvent.ERROR));
       }

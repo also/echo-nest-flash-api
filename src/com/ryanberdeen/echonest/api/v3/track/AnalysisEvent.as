@@ -3,6 +3,7 @@ package com.ryanberdeen.echonest.api.v3.track {
 
   public class AnalysisEvent extends Event {
     public static const UNKNOWN:String = "unknown";
+    public static const UNAVAILABLE:String = "unavailable";
     public static const PENDING:String = "pending";
     public static const NOT_READY:String = "notReady";
     public static const COMPLETE:String = "analyzed";
