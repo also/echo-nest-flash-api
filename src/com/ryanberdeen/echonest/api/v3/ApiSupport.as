@@ -117,9 +117,8 @@ package com.ryanberdeen.echonest.api.v3 {
       if (options.onResponse) {
         loader.addEventListener(Event.COMPLETE, function(e:Event):void {
           try {
-            var responseXml:XML = new XML(loader.data);
-            checkStatus(responseXml);
-            responseProcessorArgs.push(responseXml);
+            var parsedResponse:Object = parseRawResponse(loader.data);
+            responseProcessorArgs.push(parsedResponse);
             var response:Object = responseProcessor.apply(responseProcessor, responseProcessorArgs);
             if (options.onResponseArgument) {
               options.onResponse(options.onResponseArgument, response);
@@ -139,6 +138,12 @@ package com.ryanberdeen.echonest.api.v3 {
       addEventListeners(options, loader);
 
       return loader;
+    }
+
+    protected function parseRawResponse(data:String):Object {
+      var responseXml:XML = new XML(data);
+      checkStatus(responseXml);
+      return responseXml;
     }
 
     /**
@@ -188,7 +193,7 @@ package com.ryanberdeen.echonest.api.v3 {
     *
     * @throws EchoNestError When the status code is nonzero.
     */
-    public function checkStatus(response:XML):void {
+    public function checkStatus(response:Object):void {
       if (response.status.code != 0) {
         throw new EchoNestError(response.status.code, response.status.message);
       }

@@ -18,6 +18,8 @@ package com.ryanberdeen.echonest.api.v3.track {
 
     private var _analysis:Object;
 
+    public var uploaded:Boolean;
+
     public function AnalysisLoader(trackApi:TrackApi):void {
       this.trackApi = trackApi;
       _properties = TrackApi.ALL_PROPERTIES;
@@ -67,10 +69,7 @@ package com.ryanberdeen.echonest.api.v3.track {
 
     private function metadataResponseHandler(metadata:Object):void {
       if (metadata.status == 'PENDING') {
-        // try again in 5 seconds
-        dispatchEvent(new AnalysisEvent(AnalysisEvent.PENDING));
-        waitForAnalysis(5000);
-        return;
+        handlePending();
       }
       else if (metadata.status == 'COMPLETE') {
         dispatchEvent(new AnalysisEvent(AnalysisEvent.COMPLETE));
@@ -78,14 +77,25 @@ package com.ryanberdeen.echonest.api.v3.track {
       }
       else if (metadata.status == 'UNKNOWN') {
         dispatchEvent(new AnalysisEvent(AnalysisEvent.UNKNOWN));
+        dispatchEvent(new AnalysisEvent(AnalysisEvent.UPLOAD_REQUIRED));
       }
       else if (metadata.status == 'UNAVAILABLE') {
-          dispatchEvent(new AnalysisEvent(AnalysisEvent.UNAVAILABLE));
+        if (uploaded) {
+          handlePending();
+        }
+        dispatchEvent(new AnalysisEvent(AnalysisEvent.UNAVAILABLE));
+        dispatchEvent(new AnalysisEvent(AnalysisEvent.UPLOAD_REQUIRED));
       }
       else {
         dispatchEvent(new AnalysisEvent(AnalysisEvent.ERROR));
       }
       analysis.metadata = metadata;
+    }
+
+    private function handlePending() {
+        // try again in 5 seconds
+        dispatchEvent(new AnalysisEvent(AnalysisEvent.PENDING));
+        waitForAnalysis(5000);
     }
 
     private function metadataEchoNestErrorHandler(e:EchoNestError):void {

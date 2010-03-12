@@ -8,6 +8,7 @@ package com.ryanberdeen.echonest.api.v3.track {
     public static const NOT_READY:String = "notReady";
     public static const COMPLETE:String = "analyzed";
     public static const ERROR:String = "error";
+    public static const UPLOAD_REQUIRED:String = "upload_required";
 
     public function AnalysisEvent(type:String) {
       super(type);
