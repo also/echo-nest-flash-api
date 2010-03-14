@@ -92,7 +92,7 @@ package com.ryanberdeen.echonest.api.v3.track {
       analysis.metadata = metadata;
     }
 
-    private function handlePending() {
+    private function handlePending():void {
         // try again in 5 seconds
         dispatchEvent(new AnalysisEvent(AnalysisEvent.PENDING));
         waitForAnalysis(5000);
