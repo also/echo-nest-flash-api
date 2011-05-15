@@ -22,7 +22,6 @@ package com.ryanberdeen.echonest.api.v4 {
   * Base class for Echo Nest API classes.
   */
   public class ApiSupport {
-    public static const API_VERSION:int = 3;
     /**
     * @private
     */
