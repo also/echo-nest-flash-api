@@ -1,0 +1,3 @@
+[submodule "lib/as3corelib"]
+	path = lib/as3corelib
+	url = https://github.com/mikechambers/as3corelib.git
