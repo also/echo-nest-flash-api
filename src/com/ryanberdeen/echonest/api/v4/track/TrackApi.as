@@ -5,6 +5,7 @@
  */
 
 package com.ryanberdeen.echonest.api.v4.track {
+  import com.adobe.serialization.json.JSON;
   import com.ryanberdeen.echonest.api.v4.ApiSupport;
   import com.ryanberdeen.echonest.api.v4.EchoNestError;
 
@@ -48,6 +49,11 @@ package com.ryanberdeen.echonest.api.v4.track {
     * @param dispatcher The file reference to add the event listeners to.
     */
     public function addFileReferenceEventListeners(options:Object, fileReference:FileReference, responseProcessor:Function, ...responseProcessorArgs):void {
+      // TODO document
+      if (options.onOpen) {
+        fileReference.addEventListener(Event.OPEN, options.onOpen);
+      }
+
       if (options.onComplete) {
         fileReference.addEventListener(Event.COMPLETE, options.onComplete);
       }
@@ -69,6 +75,28 @@ package com.ryanberdeen.echonest.api.v4.track {
       }
 
       addEventListeners(options, fileReference);
+    }
+
+    public function loadAnalysis(track:Object, loaderOptions:Object):URLLoader {
+      var loader:URLLoader = new URLLoader();
+
+      if (loaderOptions.onComplete) {
+        loader.addEventListener(Event.COMPLETE, loaderOptions.onComplete);
+      }
+
+      if (loaderOptions.onResponse) {
+        loader.addEventListener(Event.COMPLETE, function(e:Event):void {
+          var analysis:Object = JSON.decode(loader.data);
+          loaderOptions.onResponse(analysis);
+        });
+      }
+
+      addEventListeners(loaderOptions, loader);
+
+      var request:URLRequest = new URLRequest();
+      request.url = track.audio_summary.analysis_url;
+      loader.load(request);
+      return loader;
     }
 
     /**
