@@ -20,7 +20,7 @@ end
 
 task :asdoc => 'dist/docs/asdoc' do
   library_path = LIBRARIES.join(',')
-  sh "asdoc -source-path src -doc-sources src -library-path+=#{library_path} -output dist/docs/asdoc"
+  sh "asdoc -source-path src -doc-sources src -library-path+=#{library_path} -output dist/docs/asdoc -window-title 'Echo Nest Flash API Documentation'"
 end
 
 task :submodule do
