@@ -23,10 +23,13 @@ package com.ryanberdeen.echonest.api.v4 {
   */
   public class ApiSupport {
     /**
-    * @private
-    */
-    protected var _baseUrl:String = 'http://developer.echonest.com/api/v4/';
+     * The base URL for API methods.
+     */
+    public var baseUrl:String = 'http://developer.echonest.com/api/v4/';
 
+    /**
+     * The API key to use for Echo Nest API requests.
+     */
     public var apiKey:String;
 
     /**
@@ -46,7 +49,7 @@ package com.ryanberdeen.echonest.api.v4 {
       }
 
       var request:URLRequest = new URLRequest();
-      request.url = _baseUrl + method;
+      request.url = baseUrl + method;
       request.data = variables;
 
       return request;

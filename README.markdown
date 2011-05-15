@@ -51,8 +51,8 @@ private function uploadFile():void {
 License
 =======
 
-Copyright 2009-2011 Ryan Berdeen. All rights reserved.
-Distributed under the terms of the MIT License.
+Copyright 2009-2011 Ryan Berdeen. All rights reserved.  
+Distributed under the terms of the MIT License.  
 See accompanying file LICENSE.txt
 
  [1]: http://developer.echonest.com/docs/v4/track.html
