@@ -25,26 +25,28 @@ echo-nest-flash-api implements a small subset of the [Echo Nest v4 API track met
 Upload
 ------
 
-    var fileReference:FileReference;
+```actionscript
+var fileReference:FileReference;
 
-    private function chooseFile():void {
-      fileReference = new FileReference();
-      fileReference.addEventListener(Event.SELECT, function(e:Event):void {
-        uploadFile();
-      });
-      fileReference.browse();
-    }
+private function chooseFile():void {
+  fileReference = new FileReference();
+  fileReference.addEventListener(Event.SELECT, function(e:Event):void {
+    uploadFile();
+  });
+  fileReference.browse();
+}
 
-    private function uploadFile():void {
-      trackApi.uploadFileReference({track: fileReference}, {
-        onResponse: function(track:Object):void {
-          trace('id: ' + track.id + ', md5: ' + track.md5);  // id: TRMVA0211BC6E08329, md5: 2f45abacba9e9d2312afa63a8df10d23
-        },
-        onEchoNestError: function(error:EchoNestError):void {
-          trace(error.code + ': ' + error.description);
-        }
-      });
+private function uploadFile():void {
+  trackApi.uploadFileReference({track: fileReference}, {
+    onResponse: function(track:Object):void {
+      trace('id: ' + track.id + ', md5: ' + track.md5);  // id: TRMVA0211BC6E08329, md5: 2f45abacba9e9d2312afa63a8df10d23
+    },
+    onEchoNestError: function(error:EchoNestError):void {
+      trace(error.code + ': ' + error.description);
     }
+  });
+}
+```
 
 License
 =======
