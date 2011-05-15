@@ -20,19 +20,7 @@ Add both `echo-nest-flash-api/src` to your classpath. Your Flash, Flex, or mxmlc
 Using the API
 =============
 
-echo-nest-flash-api implements all of the [Echo Nest track API methods][1].
-
-Analysis
---------
-
-    var trackApi:TrackApi = new TrackApi();
-    trackApi.apiKey = 'EJ1B4BFNYQOC56SGF';
-
-    trackApi.getMode({id: 'music://id.echonest.com/~/TR/TRLFPPE11C3F10749F'}, {
-      onResponse: function(mode:NumberWithConfidence):void {
-        trace('Mode: ' + mode.value +', confidence: ' + mode.confidence);  // Mode: 1, confidence: 1
-      }
-    });
+echo-nest-flash-api implements a small subset of the [Echo Nest v4 API track methods][1].
 
 Upload
 ------
@@ -48,9 +36,9 @@ Upload
     }
 
     private function uploadFile():void {
-      trackApi.uploadFileReference({file: fileReference}, {
+      trackApi.uploadFileReference({track: fileReference}, {
         onResponse: function(track:Object):void {
-          trace('id: ' + track.id + ', md5: ' + track.md5);  // id: music://id.echonest.com/~/TR/TRMVA0211BC6E08329, md5: 2f45abacba9e9d2312afa63a8df10d23
+          trace('id: ' + track.id + ', md5: ' + track.md5);  // id: TRMVA0211BC6E08329, md5: 2f45abacba9e9d2312afa63a8df10d23
         },
         onEchoNestError: function(error:EchoNestError):void {
           trace(error.code + ': ' + error.description);
@@ -61,8 +49,8 @@ Upload
 License
 =======
 
-Copyright 2009 Ryan Berdeen. All rights reserved.  
-Distributed under the terms of the MIT License.  
+Copyright 2009-2011 Ryan Berdeen. All rights reserved.
+Distributed under the terms of the MIT License.
 See accompanying file LICENSE.txt
 
- [1]: http://developer.echonest.com/pages/overview
+ [1]: http://developer.echonest.com/docs/v4/track.html
