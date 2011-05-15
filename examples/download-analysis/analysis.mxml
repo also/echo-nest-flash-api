@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+This example uses the Echo Nest API to analyze a track.
+
+-->
+
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" creationComplete="init();">
+  <mx:Panel title="Analyze" width="100%" paddingTop="10" paddingRight="10" paddingBottom="10" paddingLeft="10">
+    <mx:Label text="API Key:"/>
+    <mx:TextInput id="apiKey"/>
+    <mx:Button id="browseButton" label="Choose a song…" click="chooseFile();"/>
+    <mx:ProgressBar id="progressBar" mode="manual" label="" width="100%"/>
+    <mx:TextArea id="logTextArea" width="100%" height="200" editable="false" valueCommit="logTextArea.verticalScrollPosition=logTextArea.maxVerticalScrollPosition"/>
+  </mx:Panel>
+
+  <mx:Script><![CDATA[
+    import com.adobe.serialization.json.JSON;
+
+    import com.ryanberdeen.echonest.api.v4.track.TrackApi;
+
+    import flash.net.FileReference;
+
+    private var trackApi:TrackApi = new TrackApi();
+    private var fileReference:FileReference;
+    private var request:URLRequest;
+
+    private function init():void {
+      // trackApi.baseUrl = 'http://localhost:3000/api/v4/';
+      fileReference = new FileReference();
+      fileReference.addEventListener(Event.SELECT, fileReferenceSelectHandler);
+    }
+
+    private function log(o:Object):void {
+      logTextArea.htmlText += o + "\n";
+    }
+
+    private function setStatus(status:String, indeterminate:Boolean = false):void {
+      progressBar.label = status;
+      progressBar.indeterminate = indeterminate;
+      if (indeterminate) {
+        progressBar.mode = 'event';
+      }
+      else {
+        progressBar.mode = 'manual';
+      }
+    }
+
+    private function clearStatus():void {
+      progressBar.label = '';
+      progressBar.indeterminate = false;
+      progressBar.mode = 'manual';
+    }
+
+    private function chooseFile():void {
+      setStatus('Choose file');
+      fileReference.browse();
+    }
+
+    private function fileReferenceSelectHandler(e:Event):void {
+        trackApi.apiKey = apiKey.text;
+
+        log('uploading');
+        setStatus('Uploading');
+
+        request = trackApi.uploadFileReference({track: fileReference, 'filetype': 'mp3', 'bucket': 'audio_summary'}, {
+          onResponse: function (track:Object):void {
+            log('track: ' + JSON.encode(track));
+
+            trackApi.loadAnalysis(track, {
+              onResponse: function (analysisResponse:Object):void {
+                log('loaded analyis');
+                log('track: ' + JSON.encode(analysisResponse.track));
+                setStatus('Complete');
+              },
+              onError: function(e:ErrorEvent):void {
+                log('error loading analysis: ' + e.text);
+              }
+            });
+
+            setStatus('Loading Analysis');
+            log('loading analysis');
+          },
+          onOpen: fileReferenceInfoHandler,
+          onError: fileReferenceErrorHandler,
+          onProgress: uploadProgressHandler,
+          onComplete: fileReferenceInfoHandler,
+          onHttpStatus: fileReferenceInfoHandler
+        });
+    }
+
+    private function fileReferenceInfoHandler(e:Event):void {
+      log(e);
+    }
+
+    private function fileReferenceErrorHandler(e:ErrorEvent):void {
+      setStatus('Error', false);
+      log('error: ' + e.text);
+    }
+
+    private function uploadProgressHandler(e:ProgressEvent):void {
+      progressBar.setProgress(e.bytesLoaded, e.bytesTotal);
+      if (e.bytesLoaded == e.bytesTotal) {
+        setStatus('Analyzing', true);
+        log('analyzing');
+      }
+    }
+  ]]></mx:Script>
+</mx:Application>
