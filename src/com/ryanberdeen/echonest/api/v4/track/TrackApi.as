@@ -142,7 +142,7 @@ package com.ryanberdeen.echonest.api.v4.track {
     * Invokes the Echo Nest <code>upload</code> API method.
     *
     * <p>This method is for uploads using the <code>url</code> parameter.
-    * To upload a file, use <code>uploadFileReference()</code>.
+    * To upload a file, use <code>uploadFileReference()</code>.</p>
     *
     * @param parameters The parameters to include in the API request.
     * @param loaderOptions The event listener options for the loader.
