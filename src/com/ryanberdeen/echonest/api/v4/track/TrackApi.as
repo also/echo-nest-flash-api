@@ -86,7 +86,7 @@ package com.ryanberdeen.echonest.api.v4.track {
 
       if (loaderOptions.onResponse) {
         loader.addEventListener(Event.COMPLETE, function(e:Event):void {
-          var analysis:Object = JSON.decode(loader.data);
+          var analysis:Object = com.adobe.serialization.json.JSON.decode(loader.data);
           loaderOptions.onResponse(analysis);
         });
       }

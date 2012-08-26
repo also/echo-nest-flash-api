@@ -134,7 +134,7 @@ package com.ryanberdeen.echonest.api.v4 {
     }
 
     protected function parseRawResponse(data:String):Object {
-      var responseObject:* = JSON.decode(data).response;
+      var responseObject:* = com.adobe.serialization.json.JSON.decode(data).response;
       checkStatus(responseObject);
       return responseObject;
     }

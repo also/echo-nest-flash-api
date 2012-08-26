@@ -66,12 +66,12 @@ This example uses the Echo Nest API to analyze a track.
 
         request = trackApi.uploadFileReference({track: fileReference, 'filetype': 'mp3', 'bucket': 'audio_summary'}, {
           onResponse: function (track:Object):void {
-            log('track: ' + JSON.encode(track));
+            log('track: ' + com.adobe.serialization.json.JSON.encode(track));
 
             trackApi.loadAnalysis(track, {
               onResponse: function (analysisResponse:Object):void {
                 log('loaded analyis');
-                log('track: ' + JSON.encode(analysisResponse.track));
+                log('track: ' + com.adobe.serialization.json.JSON.encode(analysisResponse.track));
                 setStatus('Complete');
               },
               onError: function(e:ErrorEvent):void {
